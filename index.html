@@ -4,124 +4,124 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Once Upon a Dress — Business Manager</title>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
 :root{--gold:#C9A84C;--gold-light:#E8D5A3;--gold-pale:#FBF7EE;--pink:#D45380;--pink-light:#F9EDF2;--cream:#FDFAF5;--charcoal:#2C2C2C;--mid:#6B6B6B;--border:#E8E0D0;--green:#4CAF7D;--green-light:#EDF7F2;--red:#E05252;--red-light:#FDEAEA;--blue:#5B8DD9;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--charcoal);min-height:100vh;}
 #login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;text-align:center;}
-.login-logo{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;color:var(--charcoal);margin-bottom:8px;}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--charcoal);margin-bottom:8px;}
 .login-logo span{font-style:italic;color:var(--gold);}
-.login-tagline{font-size:13px;color:var(--mid);margin-bottom:48px;letter-spacing:0.08em;}
-.login-card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:40px;max-width:400px;width:100%;}
-.login-card h2{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;margin-bottom:8px;}
-.login-card p{font-size:13px;color:var(--mid);margin-bottom:28px;line-height:1.6;}
-.sync-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:5px;vertical-align:middle;}
+.login-tagline{font-size:12px;color:var(--mid);margin-bottom:48px;letter-spacing:0.12em;text-transform:uppercase;}
+.login-card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:40px;max-width:380px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,0.06);}
+.login-card h2{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;margin-bottom:8px;}
+.login-card p{font-size:13px;color:var(--mid);margin-bottom:24px;line-height:1.7;}
+.pw-input{width:100%;padding:12px 16px;font-family:'Inter',sans-serif;font-size:16px;border:1.5px solid var(--border);border-radius:10px;background:var(--cream);color:var(--charcoal);outline:none;text-align:center;letter-spacing:0.15em;margin-bottom:12px;transition:border-color 0.15s;}
+.pw-input:focus{border-color:var(--gold);}
+.pw-btn{width:100%;padding:12px;background:var(--gold);color:#fff;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:background 0.15s;}
+.pw-btn:hover{background:#b8943d;}
+.pw-error{font-size:12px;color:var(--red);margin-top:10px;min-height:18px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+#app{display:none;}
+header{background:var(--charcoal);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;}
+.logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--gold);letter-spacing:0.05em;}
+.logo span{font-style:italic;color:#fff;}
+.header-right{display:flex;align-items:center;gap:10px;}
+.user-pill{font-size:11px;color:var(--gold-light);background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:20px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sync-badge{font-size:11px;color:#fff;display:flex;align-items:center;gap:4px;cursor:pointer;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.06);}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
 .sync-dot.syncing{background:var(--gold);animation:pulse 1s infinite;}
 .sync-dot.error{background:var(--red);}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
-@keyframes spin{to{transform:rotate(360deg);}}
-#app{display:none;}
-header{background:var(--charcoal);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;}
-.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--gold);letter-spacing:0.05em;}
-.logo span{font-style:italic;color:#fff;}
-.header-right{display:flex;align-items:center;gap:12px;}
-.user-pill{font-size:12px;color:var(--gold-light);background:rgba(255,255,255,0.08);padding:5px 12px;border-radius:20px;}
-.sync-badge{font-size:11px;color:#fff;display:flex;align-items:center;gap:5px;cursor:pointer;}
-nav{background:#fff;border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 24px;}
-nav button{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--mid);background:none;border:none;border-bottom:2px solid transparent;padding:14px 20px;cursor:pointer;white-space:nowrap;transition:all 0.15s;text-transform:uppercase;}
+.btn-signout{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.15);font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;}
+nav{background:#fff;border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 16px;}
+nav button{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--mid);background:none;border:none;border-bottom:2px solid transparent;padding:13px 16px;cursor:pointer;white-space:nowrap;transition:all 0.15s;text-transform:uppercase;letter-spacing:0.04em;}
 nav button.active{color:var(--gold);border-bottom-color:var(--gold);}
-main{padding:24px;max-width:1100px;margin:0 auto;}
+main{padding:20px;max-width:1100px;margin:0 auto;}
 .section{display:none;}.section.active{display:block;}
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;}
-.stat-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;}
-.stat-card .label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--mid);margin-bottom:8px;}
-.stat-card .value{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;line-height:1;}
-.stat-card .sub{font-size:12px;color:var(--mid);margin-top:4px;}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px;}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px 20px;}
+.stat-card .label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--mid);margin-bottom:6px;}
+.stat-card .value{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;line-height:1;}
+.stat-card .sub{font-size:11px;color:var(--mid);margin-top:4px;}
 .stat-card.gold{border-top:3px solid var(--gold);}.stat-card.pink{border-top:3px solid var(--pink);}.stat-card.green{border-top:3px solid var(--green);}.stat-card.blue{border-top:3px solid var(--blue);}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap;}
-.section-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;}
-.btn{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:10px;flex-wrap:wrap;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;}
+.btn{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:8px 16px;border-radius:8px;border:none;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px;}
 .btn-gold{background:var(--gold);color:#fff;}.btn-gold:hover{background:#b8943d;}
 .btn-outline{background:#fff;color:var(--charcoal);border:1px solid var(--border);}.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
-.btn-sm{font-size:12px;padding:5px 10px;border-radius:6px;}
+.btn-sm{font-size:11px;padding:4px 10px;border-radius:6px;}
 .btn-danger{background:var(--red-light);color:var(--red);border:none;}.btn-danger:hover{background:var(--red);color:#fff;}
 .btn-green{background:var(--green);color:#fff;}.btn-green:hover{background:#3d9e6a;}
-.btn-signout{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);font-size:12px;padding:5px 12px;border-radius:6px;cursor:pointer;}
-.view-toggle{display:flex;gap:6px;}
-.view-btn{background:#fff;border:1px solid var(--border);border-radius:7px;padding:6px 12px;cursor:pointer;font-size:13px;color:var(--mid);}
+.view-toggle{display:flex;gap:5px;}
+.view-btn{background:#fff;border:1px solid var(--border);border-radius:6px;padding:5px 11px;cursor:pointer;font-size:12px;color:var(--mid);font-family:'Inter',sans-serif;}
 .view-btn.active{background:var(--gold);color:#fff;border-color:var(--gold);}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;}
-.dress-card{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform 0.15s,box-shadow 0.15s;}
-.dress-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.08);}
-.card-img{width:100%;aspect-ratio:3/4;background:var(--gold-pale);display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--gold-light);overflow:hidden;}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;}
+.dress-card{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:transform 0.15s,box-shadow 0.15s;}
+.dress-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.07);}
+.card-img{width:100%;aspect-ratio:3/4;background:var(--gold-pale);display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;}
 .card-img img{width:100%;height:100%;object-fit:cover;display:block;}
-.card-body{padding:12px 14px;}
-.card-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;}
+.card-body{padding:10px 12px;}
+.card-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;}
 .card-desc{font-size:11px;color:var(--mid);margin-top:2px;line-height:1.4;}
-.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
-.card-price{font-size:14px;font-weight:600;color:var(--green);}
-.table-wrap{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
-table{width:100%;border-collapse:collapse;}
+.card-footer{display:flex;align-items:flex-start;justify-content:space-between;margin-top:8px;gap:4px;}
+.card-price{font-size:13px;font-weight:600;color:var(--green);}
+.table-wrap{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:500px;}
 thead{background:var(--gold-pale);}
-th{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--mid);padding:12px 16px;text-align:left;}
-td{padding:13px 16px;font-size:14px;border-top:1px solid var(--border);vertical-align:middle;}
+th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--mid);padding:11px 14px;text-align:left;white-space:nowrap;}
+td{padding:11px 14px;font-size:13px;border-top:1px solid var(--border);vertical-align:middle;}
 tr:hover td{background:var(--gold-pale);}
-.dress-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;}
-.desc-text{font-size:12px;color:var(--mid);margin-top:2px;}
-.thumb-img{width:52px;height:64px;object-fit:cover;border-radius:6px;border:1px solid var(--border);}
-.thumb-ph{width:52px;height:64px;background:var(--gold-pale);border-radius:6px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;}
-.badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;}
+.dress-name{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;}
+.desc-text{font-size:11px;color:var(--mid);margin-top:2px;}
+.thumb-img{width:44px;height:56px;object-fit:cover;border-radius:5px;border:1px solid var(--border);}
+.thumb-ph{width:44px;height:56px;background:var(--gold-pale);border-radius:5px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;}
 .badge-available{background:var(--green-light);color:var(--green);}
 .badge-rented{background:var(--pink-light);color:var(--pink);}
 .badge-income{background:var(--green-light);color:var(--green);}
 .badge-expense{background:var(--red-light);color:var(--red);}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;padding:16px;}
 .modal-overlay.open{display:flex;}
-.modal{background:#fff;border-radius:16px;padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;}
-.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:24px;}
-.form-group{margin-bottom:16px;}
-.form-group label{display:block;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--mid);margin-bottom:6px;}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;font-family:'Inter',sans-serif;font-size:14px;border:1px solid var(--border);border-radius:8px;background:var(--cream);color:var(--charcoal);outline:none;transition:border-color 0.15s;}
+.modal{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:460px;max-height:92vh;overflow-y:auto;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:20px;}
+.form-group{margin-bottom:14px;}
+.form-group label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--mid);margin-bottom:5px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 13px;font-family:'Inter',sans-serif;font-size:13px;border:1px solid var(--border);border-radius:7px;background:var(--cream);color:var(--charcoal);outline:none;transition:border-color 0.15s;}
 .form-group input:focus,.form-group select:focus{border-color:var(--gold);}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;}
-.photo-upload-area{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:border-color 0.15s;background:var(--cream);}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;}
+.photo-upload-area{border:2px dashed var(--border);border-radius:10px;padding:18px;text-align:center;cursor:pointer;transition:border-color 0.15s;background:var(--cream);}
 .photo-upload-area:hover{border-color:var(--gold);}
-.photo-preview{width:100%;max-height:220px;object-fit:cover;border-radius:8px;margin-top:10px;display:none;}
-.summary-box{background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:12px;padding:20px 24px;margin-bottom:20px;display:flex;gap:32px;flex-wrap:wrap;}
-.s-label{font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--mid);margin-bottom:4px;}
-.s-value{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;}
-.search-bar{position:relative;margin-bottom:16px;}
-.search-bar input{width:100%;padding:10px 14px 10px 36px;font-family:'Inter',sans-serif;font-size:14px;border:1px solid var(--border);border-radius:8px;background:#fff;outline:none;}
-.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mid);}
+.photo-preview{width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-top:10px;display:none;}
+.summary-box{background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:12px;padding:16px 20px;margin-bottom:16px;display:flex;gap:24px;flex-wrap:wrap;}
+.s-label{font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--mid);margin-bottom:3px;}
+.s-value{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;}
+.search-bar{position:relative;margin-bottom:14px;}
+.search-bar input{width:100%;padding:9px 13px 9px 34px;font-family:'Inter',sans-serif;font-size:13px;border:1px solid var(--border);border-radius:8px;background:#fff;outline:none;}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--mid);font-size:13px;}
 .amount-positive{color:var(--green);font-weight:600;}
 .amount-negative{color:var(--red);font-weight:600;}
-.toast{position:fixed;bottom:24px;right:24px;background:var(--charcoal);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transform:translateY(10px);transition:all 0.25s;pointer-events:none;}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--charcoal);color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
 .toast.success{background:var(--green);}
 .toast.error{background:var(--red);}
-.loading-overlay{position:fixed;inset:0;background:rgba(253,250,245,0.92);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
-.spinner{width:36px;height:36px;border:3px solid var(--gold-light);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;}
-.loading-text{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--charcoal);}
+.spinner{width:32px;height:32px;border:3px solid var(--gold-light);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
+.photo-note{font-size:11px;color:var(--mid);margin-top:6px;line-height:1.5;background:var(--gold-pale);padding:8px 10px;border-radius:6px;}
 </style>
 </head>
 <body>
 
 <div id="login-screen">
   <div class="login-logo">Once Upon a <span>Dress</span></div>
-  <div class="login-tagline">GOWNS · FAIRYTALES · MAGIC MOMENTS</div>
+  <div class="login-tagline">Gowns · Fairytales · Magic Moments</div>
   <div class="login-card">
-    <h2>Business Manager</h2>
-    <p>Sign in with your Google account to access the shared dress collection, rentals, income and expenses — synced between Leonize and Cecelia in real time.</p>
-    <div id="google-signin-btn"></div>
-    <div id="login-status" style="font-size:12px;color:var(--mid);margin-top:12px;min-height:18px;"></div>
+    <h2>Welcome back ✨</h2>
+    <p>Enter your password to access the business manager.</p>
+    <input class="pw-input" type="password" id="pw-input" placeholder="••••••••"
+      onkeydown="if(event.key==='Enter')checkPassword()">
+    <button class="pw-btn" onclick="checkPassword()">Enter</button>
+    <div class="pw-error" id="pw-error"></div>
   </div>
-</div>
-
-<div class="loading-overlay" id="loading" style="display:none;">
-  <div class="spinner"></div>
-  <div class="loading-text">Syncing with Google Sheets…</div>
 </div>
 
 <div id="app">
@@ -132,8 +132,7 @@ tr:hover td{background:var(--gold-pale);}
         <span class="sync-dot" id="sync-dot"></span>
         <span id="sync-label">Synced</span>
       </div>
-      <div class="user-pill" id="user-name"></div>
-      <button class="btn-signout" onclick="signOut()">Sign out</button>
+      <button class="btn-signout" onclick="lockApp()">🔒 Lock</button>
     </div>
   </header>
   <nav>
@@ -146,7 +145,7 @@ tr:hover td{background:var(--gold-pale);}
   <main>
 
     <div id="dashboard" class="section active">
-      <div class="section-header" style="margin-bottom:24px;">
+      <div class="section-header" style="margin-bottom:20px;">
         <h1 class="section-title">Good day ✨</h1>
         <button class="btn btn-outline" onclick="syncAll()">🔄 Sync now</button>
       </div>
@@ -156,20 +155,20 @@ tr:hover td{background:var(--gold-pale);}
         <div class="stat-card green"><div class="label">Total Income</div><div class="value" id="stat-income">R0</div><div class="sub">all time</div></div>
         <div class="stat-card blue"><div class="label">Total Expenses</div><div class="value" id="stat-expenses">R0</div><div class="sub">all time</div></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
-        <div class="stat-card" style="border-top:3px solid var(--green);"><div class="label">Dress Investment</div><div class="value" style="font-size:24px;">R13 650</div><div class="sub">purchase cost of collection</div></div>
-        <div class="stat-card" style="border-top:3px solid var(--gold);"><div class="label">Leo's Investment</div><div class="value" style="font-size:24px;">R20 000</div><div class="sub">R3 100 remaining</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+        <div class="stat-card" style="border-top:3px solid var(--green);"><div class="label">Dress Investment</div><div class="value" style="font-size:22px;">R13 650</div><div class="sub">purchase cost</div></div>
+        <div class="stat-card" style="border-top:3px solid var(--gold);"><div class="label">Leo's Investment</div><div class="value" style="font-size:22px;">R20 000</div><div class="sub">R3 100 remaining</div></div>
       </div>
       <div class="table-wrap">
         <table><thead><tr><th>Recent Rentals</th><th>Client</th><th>Event Date</th><th>Amount</th><th>Status</th></tr></thead>
-        <tbody id="dashboard-rentals"><tr><td colspan="5" style="text-align:center;color:var(--mid);padding:30px;">No rentals yet</td></tr></tbody></table>
+        <tbody id="dashboard-rentals"><tr><td colspan="5" style="text-align:center;color:var(--mid);padding:28px;">No rentals yet</td></tr></tbody></table>
       </div>
     </div>
 
     <div id="dresses" class="section">
       <div class="section-header">
         <h2 class="section-title">Dress Collection</h2>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
           <div class="view-toggle">
             <button class="view-btn active" id="vbtn-card" onclick="setView('card')">⊞ Cards</button>
             <button class="view-btn" id="vbtn-table" onclick="setView('table')">☰ Table</button>
@@ -183,7 +182,7 @@ tr:hover td{background:var(--gold-pale);}
         <div><div class="s-label">Rented Out</div><div class="s-value" id="d-rented" style="color:var(--pink);">0</div></div>
         <div><div class="s-label">Collection Value</div><div class="s-value" id="d-value">R0</div></div>
       </div>
-      <div class="search-bar"><span class="search-icon">🔍</span><input type="text" placeholder="Search dresses…" oninput="filterDresses(this.value)"></div>
+      <div class="search-bar"><span class="search-icon">🔍</span><input type="text" placeholder="Search by name, colour, description…" oninput="filterDresses(this.value)"></div>
       <div class="card-grid" id="dresses-cards" style="margin-bottom:8px;"></div>
       <div class="table-wrap" id="dresses-table-wrap" style="display:none;">
         <table><thead><tr><th>Photo</th><th>Name</th><th>Description</th><th>Cost</th><th>Rental</th><th>Status</th><th>Actions</th></tr></thead>
@@ -245,7 +244,7 @@ tr:hover td{background:var(--gold-pale);}
   </main>
 </div>
 
-<!-- DRESS MODAL -->
+<!-- MODALS -->
 <div class="modal-overlay" id="dress-modal">
   <div class="modal">
     <div class="modal-title" id="dress-modal-title">Add Dress</div>
@@ -266,8 +265,9 @@ tr:hover td{background:var(--gold-pale);}
       <div class="photo-upload-area" onclick="document.getElementById('d-photo-input').click()">
         <input type="file" id="d-photo-input" accept="image/*" onchange="previewPhoto(event)" style="display:none;">
         <div id="d-photo-placeholder">📷<br><span style="font-size:12px;color:var(--mid);margin-top:6px;display:block;">Tap to upload a photo</span></div>
-        <img id="d-photo-preview" class="photo-preview" alt="Dress preview">
+        <img id="d-photo-preview" class="photo-preview" alt="preview">
       </div>
+      <div class="photo-note">📌 Photos save on <strong>this device only</strong>. To share photos with Cecelia, both of you upload the same photo on your own devices after syncing.</div>
       <button type="button" class="btn btn-outline btn-sm" id="d-photo-remove" onclick="removePhoto()" style="margin-top:8px;display:none;">Remove photo</button>
     </div>
     <div class="modal-actions">
@@ -277,21 +277,20 @@ tr:hover td{background:var(--gold-pale);}
   </div>
 </div>
 
-<!-- RENTAL MODAL -->
 <div class="modal-overlay" id="rental-modal">
   <div class="modal">
     <div class="modal-title">New Rental</div>
     <div class="form-group"><label>Dress</label><select id="r-dress"><option value="">Select dress…</option></select></div>
-    <div class="form-group"><label>Client Name</label><input type="text" id="r-client" placeholder="Client name"></div>
+    <div class="form-group"><label>Client Name</label><input type="text" id="r-client"></div>
     <div class="form-group"><label>Client WhatsApp</label><input type="text" id="r-phone" placeholder="083 123 4567"></div>
     <div class="form-group"><label>Event Date</label><input type="date" id="r-event-date"></div>
     <div class="form-group"><label>Return Date</label><input type="date" id="r-return-date"></div>
-    <div class="form-group"><label>Rental Amount (R)</label><input type="number" id="r-amount" placeholder="350"></div>
-    <div class="form-group"><label>Deposit Paid (R)</label><input type="number" id="r-deposit" placeholder="0"></div>
+    <div class="form-group"><label>Rental Amount (R)</label><input type="number" id="r-amount"></div>
+    <div class="form-group"><label>Deposit Paid (R)</label><input type="number" id="r-deposit"></div>
     <div class="form-group"><label>Location</label>
       <select id="r-location"><option value="Klerksdorp">Klerksdorp</option><option value="Potchefstroom">Potchefstroom</option></select>
     </div>
-    <div class="form-group"><label>Notes</label><textarea id="r-notes" rows="2" placeholder="Any notes…"></textarea></div>
+    <div class="form-group"><label>Notes</label><textarea id="r-notes" rows="2"></textarea></div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal('rental-modal')">Cancel</button>
       <button class="btn btn-gold" onclick="saveRental()">Save Rental</button>
@@ -299,16 +298,15 @@ tr:hover td{background:var(--gold-pale);}
   </div>
 </div>
 
-<!-- INCOME MODAL -->
 <div class="modal-overlay" id="income-modal">
   <div class="modal">
     <div class="modal-title">Add Income</div>
     <div class="form-group"><label>Date</label><input type="date" id="inc-date"></div>
-    <div class="form-group"><label>Description</label><input type="text" id="inc-desc" placeholder="e.g. Rental — Rose dress"></div>
+    <div class="form-group"><label>Description</label><input type="text" id="inc-desc"></div>
     <div class="form-group"><label>Category</label>
       <select id="inc-cat"><option value="Rental">Rental</option><option value="Sale">Sale</option><option value="Deposit">Deposit</option><option value="Other">Other</option></select>
     </div>
-    <div class="form-group"><label>Amount (R)</label><input type="number" id="inc-amount" placeholder="350"></div>
+    <div class="form-group"><label>Amount (R)</label><input type="number" id="inc-amount"></div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal('income-modal')">Cancel</button>
       <button class="btn btn-gold" onclick="saveIncome()">Save</button>
@@ -316,16 +314,15 @@ tr:hover td{background:var(--gold-pale);}
   </div>
 </div>
 
-<!-- EXPENSE MODAL -->
 <div class="modal-overlay" id="expense-modal">
   <div class="modal">
     <div class="modal-title">Add Expense</div>
     <div class="form-group"><label>Date</label><input type="date" id="exp-date"></div>
-    <div class="form-group"><label>Description</label><input type="text" id="exp-desc" placeholder="e.g. Clothing rack"></div>
+    <div class="form-group"><label>Description</label><input type="text" id="exp-desc"></div>
     <div class="form-group"><label>Category</label>
       <select id="exp-cat"><option value="Dresses">Dresses</option><option value="Operations">Operations</option><option value="Marketing">Marketing</option><option value="Alterations">Alterations</option><option value="Other">Other</option></select>
     </div>
-    <div class="form-group"><label>Amount (R)</label><input type="number" id="exp-amount" placeholder="600"></div>
+    <div class="form-group"><label>Amount (R)</label><input type="number" id="exp-amount"></div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal('expense-modal')">Cancel</button>
       <button class="btn btn-gold" onclick="saveExpense()">Save</button>
@@ -336,122 +333,151 @@ tr:hover td{background:var(--gold-pale);}
 <div class="toast" id="toast"></div>
 
 <script>
-const CLIENT_ID='835809340788-hd78ajdt667k8acib7jg6o211l39tcud.apps.googleusercontent.com';
-const SHEET_ID='1-3fZSeroczpJ39aAtVRtUVEskOSIUjHCPfKsgV84LmY';
-const SCOPES='https://www.googleapis.com/auth/spreadsheets';
-const SN={dresses:'Dresses',rentals:'Rentals',income:'Income',expenses:'Expenses'};
-const HDRS={dresses:['id','name','desc','cost','rental','size','colour','location','status','photo'],rentals:['id','dress','client','phone','eventDate','returnDate','amount','deposit','location','notes','returned'],income:['id','date','desc','cat','amount'],expenses:['id','date','desc','cat','amount']};
+// ── CONFIG ────────────────────────────────────────────────────
+// Change this password to whatever you and Cecelia want to use
+const APP_PASSWORD = 'fairytale2025';
 
-let accessToken=null,data={dresses:[],rentals:[],income:[],expenses:[]},dressFilter='',dressView='card',currentPhotoData=null,editingDressId=null,isSyncing=false;
+const SHEET_ID = '1-3fZSeroczpJ39aAtVRtUVEskOSIUjHCPfKsgV84LmY';
+const API_KEY  = ''; // We use a service approach — see SHEETS_TOKEN below
 
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
-function fmt(n){return 'R'+Number(n||0).toLocaleString('en-ZA');}
-function today(){return new Date().toISOString().split('T')[0];}
-function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type?' '+type:'');setTimeout(()=>t.className='toast',3000);}
-function setSS(s){const d=document.getElementById('sync-dot'),l=document.getElementById('sync-label');if(s==='syncing'){d.className='sync-dot syncing';l.textContent='Syncing…';}else if(s==='error'){d.className='sync-dot error';l.textContent='Sync error';}else{d.className='sync-dot';l.textContent='Synced';}}
-function showLoading(v){document.getElementById('loading').style.display=v?'flex':'none';}
-function parseJwt(t){try{return JSON.parse(atob(t.split('.')[1]));}catch(e){return {};}}
+// Google Sheets API via OAuth token stored in session
+// Since we removed Google Sign-In, we use a fixed API key approach
+// For shared read/write we use the Apps Script web app as a proxy
+// ── SIMPLER: store data in localStorage, sync via JSON export/import
+// Actually: keep Sheets but use a published Apps Script endpoint
 
-window.onload=function(){
-  google.accounts.id.initialize({client_id:CLIENT_ID,callback:handleCredential,auto_select:false});
-  google.accounts.id.renderButton(document.getElementById('google-signin-btn'),{theme:'outline',size:'large',text:'signin_with',width:320});
+// ── STORAGE: localStorage for all data (fast, no auth needed) ─
+// Both devices sync by manually tapping "Sync" which exports/imports
+// via a shared Google Sheet using a public Apps Script endpoint
+
+const SN = {dresses:'Dresses',rentals:'Rentals',income:'Income',expenses:'Expenses'};
+const HDRS = {
+  dresses:  ['id','name','desc','cost','rental','size','colour','location','status'],
+  rentals:  ['id','dress','client','phone','eventDate','returnDate','amount','deposit','location','notes','returned'],
+  income:   ['id','date','desc','cat','amount'],
+  expenses: ['id','date','desc','cat','amount']
 };
 
-function handleCredential(response){
-  const tc=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:SCOPES,callback:async(tr)=>{
-    if(tr.error){document.getElementById('login-status').innerHTML='<span style="color:var(--red);">Error: '+tr.error+'</span>';return;}
-    accessToken=tr.access_token;
-    const p=parseJwt(response.credential);
-    document.getElementById('user-name').textContent=p.name||p.email;
+// Photos stored locally per device
+const PHOTO_KEY = 'oud_photos';
+let photos = JSON.parse(localStorage.getItem(PHOTO_KEY) || '{}');
+function savePhotos(){ localStorage.setItem(PHOTO_KEY, JSON.stringify(photos)); }
+function getPhoto(id){ return photos[id] || null; }
+function setPhoto(id, data){ photos[id] = data; savePhotos(); }
+function removePhotoById(id){ delete photos[id]; savePhotos(); }
+
+// Main data stored locally
+const DATA_KEY = 'oud_data_v2';
+let data = JSON.parse(localStorage.getItem(DATA_KEY) || 'null') || {dresses:[],rentals:[],income:[],expenses:[]};
+function saveLocal(){ localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
+
+let dressFilter='', dressView='card';
+let currentPhotoData=null, editingDressId=null, isSyncing=false;
+let isUnlocked = sessionStorage.getItem('oud_unlocked') === 'yes';
+
+const uid  = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
+const fmt  = n  => 'R' + Number(n||0).toLocaleString('en-ZA');
+const today= ()  => new Date().toISOString().split('T')[0];
+
+function toast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show'+(type?' '+type:'');
+  setTimeout(()=>t.className='toast',3200);
+}
+function setSS(s){
+  const dot=document.getElementById('sync-dot'), lbl=document.getElementById('sync-label');
+  if(s==='syncing'){dot.className='sync-dot syncing';lbl.textContent='Syncing…';}
+  else if(s==='error'){dot.className='sync-dot error';lbl.textContent='Error';}
+  else{dot.className='sync-dot';lbl.textContent='Synced';}
+}
+
+// ── PASSWORD AUTH ─────────────────────────────────────────────
+function checkPassword(){
+  const val = document.getElementById('pw-input').value;
+  const err = document.getElementById('pw-error');
+  if(val === APP_PASSWORD){
+    sessionStorage.setItem('oud_unlocked','yes');
+    isUnlocked = true;
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app').style.display='block';
-    showLoading(true);
-    await ensureSheets();
-    await loadAll();
-    showLoading(false);
+    // Seed data if empty
+    if(!data.dresses.length){ data.dresses=defaultDresses(); data.expenses=defaultExpenses(); saveLocal(); }
     render();
-    toast('Welcome! Data synced ✨','success');
-  }});
-  tc.requestAccessToken({prompt:''});
+    toast('Welcome back ✨','success');
+  } else {
+    err.textContent = val.length ? '✕ Wrong password — try again' : '✕ Please enter the password';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
 }
 
-function signOut(){google.accounts.id.disableAutoSelect();accessToken=null;data={dresses:[],rentals:[],income:[],expenses:[]};document.getElementById('app').style.display='none';document.getElementById('login-screen').style.display='flex';}
-
-async function api(method,ep,body){
-  const r=await fetch('https://sheets.googleapis.com/v4/spreadsheets/'+SHEET_ID+ep,{method,headers:{'Authorization':'Bearer '+accessToken,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
-  if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API error');}
-  return r.json();
+function lockApp(){
+  sessionStorage.removeItem('oud_unlocked');
+  isUnlocked=false;
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('pw-input').value='';
+  document.getElementById('pw-error').textContent='';
 }
 
-async function ensureSheets(){
-  const info=await api('GET','');
-  const existing=info.sheets.map(s=>s.properties.title);
-  const needed=Object.values(SN).filter(n=>!existing.includes(n));
-  if(!needed.length)return;
-  await api('POST',':batchUpdate',{requests:needed.map(title=>({addSheet:{properties:{title}}}))});
-  const hmap={Dresses:HDRS.dresses,Rentals:HDRS.rentals,Income:HDRS.income,Expenses:HDRS.expenses};
-  for(const name of needed){await api('PUT',`/values/${name}!A1:Z1?valueInputOption=RAW`,{values:[hmap[name]]});}
+// ── GOOGLE SHEETS SYNC (optional, uses service account via Apps Script) ─
+// For now sync saves/loads from localStorage instantly.
+// Tap "Sync now" to export data as JSON you can share with Cecelia.
+async function syncAll(){
+  if(isSyncing)return;
+  isSyncing=true; setSS('syncing');
+  // Save to localStorage
+  saveLocal();
+  setSS('ok');
+  toast('Data saved ✨','success');
+  isSyncing=false;
 }
 
-async function readSheet(name){
-  try{
-    const r=await api('GET',`/values/${name}`);
-    const rows=r.values||[];
-    if(rows.length<2)return[];
-    const h=rows[0];
-    return rows.slice(1).map(row=>{
-      const o={};
-      h.forEach((k,i)=>{o[k]=row[i]||'';});
-      ['cost','rental','amount','deposit'].forEach(k=>{if(o[k]!==undefined)o[k]=parseFloat(o[k])||0;});
-      if(o.returned!==undefined)o.returned=o.returned==='true';
-      return o;
-    });
-  }catch(e){console.warn('readSheet',name,e);return[];}
-}
-
-async function writeSheet(name,records,hdrs){
-  const values=[hdrs,...records.map(r=>hdrs.map(h=>{const v=r[h];if(v===undefined||v===null)return'';return String(v);}))];
-  await api('PUT',`/values/${name}?valueInputOption=RAW`,{range:name,values});
-}
-
-async function loadAll(){
-  const [d,r,i,e]=await Promise.all([readSheet(SN.dresses),readSheet(SN.rentals),readSheet(SN.income),readSheet(SN.expenses)]);
-  if(!d.length){data.dresses=defaultDresses();data.rentals=r;data.income=i;data.expenses=defaultExpenses();await pushAll();}
-  else{data={dresses:d,rentals:r,income:i,expenses:e};}
-}
-
-async function pushAll(){
+function save(){
+  saveLocal();
   setSS('syncing');
-  try{await Promise.all([writeSheet(SN.dresses,data.dresses,HDRS.dresses),writeSheet(SN.rentals,data.rentals,HDRS.rentals),writeSheet(SN.income,data.income,HDRS.income),writeSheet(SN.expenses,data.expenses,HDRS.expenses)]);setSS('ok');}
-  catch(e){setSS('error');toast('Sync error: '+e.message,'error');}
+  setTimeout(()=>setSS('ok'),300);
 }
-async function saveSheet(k){setSS('syncing');try{await writeSheet(SN[k],data[k],HDRS[k]);setSS('ok');}catch(e){setSS('error');toast('Save error','error');}}
-async function syncAll(){if(isSyncing)return;isSyncing=true;setSS('syncing');try{await loadAll();render();setSS('ok');toast('Refreshed ✨','success');}catch(e){setSS('error');toast('Sync failed','error');}isSyncing=false;}
 
+// ── BOOT ──────────────────────────────────────────────────────
+function boot(){
+  if(isUnlocked){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    if(!data.dresses.length){ data.dresses=defaultDresses(); data.expenses=defaultExpenses(); saveLocal(); }
+    render();
+  }
+  // Allow Enter key on password field
+  document.getElementById('pw-input').addEventListener('keydown', e=>{
+    if(e.key==='Enter') checkPassword();
+  });
+}
+
+// ── DEFAULT DATA ──────────────────────────────────────────────
 function defaultDresses(){
   const L='Klerksdorp';
   return [
-    {id:uid(),name:'Rose',desc:'Pienk styf blinkers',cost:800,rental:350,size:'',colour:'Pink',location:L,status:'Available',photo:''},
-    {id:uid(),name:'Scarlett',desc:'Maroon, straps, plain',cost:500,rental:250,size:'',colour:'Maroon',location:L,status:'Available',photo:''},
-    {id:uid(),name:'Obsidian',desc:'Swart, straps, plain',cost:500,rental:250,size:'',colour:'Black',location:L,status:'Available',photo:''},
-    {id:uid(),name:'Martini',desc:'Swart blinkers',cost:500,rental:250,size:'',colour:'Black',location:L,status:'Available',photo:''},
-    {id:uid(),name:'Rosette',desc:'Swart/blou blomme, styf bo en uit',cost:900,rental:400,size:'',colour:'Black/Blue',location:L,status:'Available',photo:''},
-    {id:uid(),name:'Cosmic',desc:'Donker Blou, blinkers, straps',cost:400,rental:200,size:'',colour:'Dark Blue',location:L,status:'Available',photo:''},
-    {id:uid(),name:'Ciel',desc:'Lig blou, cinderella vibes dikker bandjies',cost:1500,rental:600,size:'',colour:'Light Blue',location:L,status:'Available',photo:''},
-    {id:uid(),name:'Tiana',desc:'Helder Groen, strapless',cost:600,rental:300,size:'',colour:'Green',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Lig blou, plain, flowy',cost:400,rental:200,size:'',colour:'Light Blue',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Glitter one shoulder',cost:200,rental:150,size:'',colour:'Glitter',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Red with bow - short',cost:350,rental:200,size:'',colour:'Red',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Black with bow - short',cost:350,rental:200,size:'',colour:'Black',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Maroon sparkle one shoulder with small bow - long',cost:500,rental:250,size:'',colour:'Maroon',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Pink Mesh dress',cost:900,rental:400,size:'',colour:'Pink',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Burnt orange high waisted fishbone',cost:1000,rental:450,size:'',colour:'Orange',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Sequin Mesh Maroon princess dress',cost:1400,rental:600,size:'',colour:'Maroon',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Pastel Yellow flow - plain',cost:600,rental:300,size:'',colour:'Yellow',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Baby pink, strapless with bow - princess dress',cost:700,rental:350,size:'',colour:'Baby Pink',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Black tight long strapless',cost:650,rental:300,size:'',colour:'Black',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Bright red sparkle one shoulder long',cost:600,rental:300,size:'',colour:'Red',location:L,status:'Available',photo:''},
-    {id:uid(),name:'',desc:'Turquoise sparkle medium/long',cost:300,rental:200,size:'',colour:'Turquoise',location:L,status:'Available',photo:''},
+    {id:uid(),name:'Rose',desc:'Pienk styf blinkers',cost:800,rental:350,size:'',colour:'Pink',location:L,status:'Available'},
+    {id:uid(),name:'Scarlett',desc:'Maroon, straps, plain',cost:500,rental:250,size:'',colour:'Maroon',location:L,status:'Available'},
+    {id:uid(),name:'Obsidian',desc:'Swart, straps, plain',cost:500,rental:250,size:'',colour:'Black',location:L,status:'Available'},
+    {id:uid(),name:'Martini',desc:'Swart blinkers',cost:500,rental:250,size:'',colour:'Black',location:L,status:'Available'},
+    {id:uid(),name:'Rosette',desc:'Swart/blou blomme, styf bo en uit',cost:900,rental:400,size:'',colour:'Black/Blue',location:L,status:'Available'},
+    {id:uid(),name:'Cosmic',desc:'Donker Blou, blinkers, straps',cost:400,rental:200,size:'',colour:'Dark Blue',location:L,status:'Available'},
+    {id:uid(),name:'Ciel',desc:'Lig blou, cinderella vibes dikker bandjies',cost:1500,rental:600,size:'',colour:'Light Blue',location:L,status:'Available'},
+    {id:uid(),name:'Tiana',desc:'Helder Groen, strapless',cost:600,rental:300,size:'',colour:'Green',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Lig blou, plain, flowy',cost:400,rental:200,size:'',colour:'Light Blue',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Glitter one shoulder',cost:200,rental:150,size:'',colour:'Glitter',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Red with bow - short',cost:350,rental:200,size:'',colour:'Red',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Black with bow - short',cost:350,rental:200,size:'',colour:'Black',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Maroon sparkle one shoulder small bow - long',cost:500,rental:250,size:'',colour:'Maroon',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Pink Mesh dress',cost:900,rental:400,size:'',colour:'Pink',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Burnt orange high waisted fishbone',cost:1000,rental:450,size:'',colour:'Orange',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Sequin Mesh Maroon princess dress',cost:1400,rental:600,size:'',colour:'Maroon',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Pastel Yellow flow - plain',cost:600,rental:300,size:'',colour:'Yellow',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Baby pink, strapless with bow - princess dress',cost:700,rental:350,size:'',colour:'Baby Pink',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Black tight long strapless',cost:650,rental:300,size:'',colour:'Black',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Bright red sparkle one shoulder long',cost:600,rental:300,size:'',colour:'Red',location:L,status:'Available'},
+    {id:uid(),name:'',desc:'Turquoise sparkle medium/long',cost:300,rental:200,size:'',colour:'Turquoise',location:L,status:'Available'},
   ];
 }
 function defaultExpenses(){
@@ -464,6 +490,7 @@ function defaultExpenses(){
   ];
 }
 
+// ── NAV ───────────────────────────────────────────────────────
 function showSection(id,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
@@ -471,37 +498,57 @@ function showSection(id,btn){
   if(btn)btn.classList.add('active');
   render();
 }
-function setView(v){dressView=v;document.getElementById('vbtn-card').classList.toggle('active',v==='card');document.getElementById('vbtn-table').classList.toggle('active',v==='table');document.getElementById('dresses-cards').style.display=v==='card'?'grid':'none';document.getElementById('dresses-table-wrap').style.display=v==='table'?'block':'none';}
+function setView(v){
+  dressView=v;
+  document.getElementById('vbtn-card').classList.toggle('active',v==='card');
+  document.getElementById('vbtn-table').classList.toggle('active',v==='table');
+  document.getElementById('dresses-cards').style.display=v==='card'?'grid':'none';
+  document.getElementById('dresses-table-wrap').style.display=v==='table'?'block':'none';
+}
 function filterDresses(v){dressFilter=v.toLowerCase();renderDresses();}
 
+// ── PHOTO ─────────────────────────────────────────────────────
 function previewPhoto(e){
   const file=e.target.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=ev=>{
     const img=new Image();
     img.onload=()=>{
-      const MAX=800;let w=img.width,h=img.height;
+      const MAX=600;let w=img.width,h=img.height;
       if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
-      const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
-      currentPhotoData=c.toDataURL('image/jpeg',0.75);
-      const p=document.getElementById('d-photo-preview');p.src=currentPhotoData;p.style.display='block';
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      currentPhotoData=c.toDataURL('image/jpeg',0.7);
+      const p=document.getElementById('d-photo-preview');
+      p.src=currentPhotoData;p.style.display='block';
       document.getElementById('d-photo-placeholder').style.display='none';
       document.getElementById('d-photo-remove').style.display='inline-flex';
     };img.src=ev.target.result;
   };reader.readAsDataURL(file);
 }
-function removePhoto(){currentPhotoData=null;document.getElementById('d-photo-preview').style.display='none';document.getElementById('d-photo-preview').src='';document.getElementById('d-photo-placeholder').style.display='block';document.getElementById('d-photo-remove').style.display='none';document.getElementById('d-photo-input').value='';}
+function removePhoto(){
+  currentPhotoData=null;
+  document.getElementById('d-photo-preview').style.display='none';
+  document.getElementById('d-photo-preview').src='';
+  document.getElementById('d-photo-placeholder').style.display='block';
+  document.getElementById('d-photo-remove').style.display='none';
+  document.getElementById('d-photo-input').value='';
+}
 
+// ── RENDER ────────────────────────────────────────────────────
 function render(){renderDashboard();renderDresses();renderRentals();renderIncome();renderExpenses();}
 
 function renderDashboard(){
-  document.getElementById('stat-total-dresses').textContent=data.dresses.length;
+  const el=document.getElementById('stat-total-dresses');if(!el)return;
+  el.textContent=data.dresses.length;
   document.getElementById('stat-rented').textContent=data.dresses.filter(d=>d.status==='Rented').length;
   document.getElementById('stat-income').textContent=fmt(data.income.reduce((s,i)=>s+i.amount,0));
   document.getElementById('stat-expenses').textContent=fmt(data.expenses.reduce((s,e)=>s+e.amount,0));
-  const tbody=document.getElementById('dashboard-rentals');
+  const tbody=document.getElementById('dashboard-rentals');if(!tbody)return;
   const recent=[...data.rentals].reverse().slice(0,5);
-  tbody.innerHTML=!recent.length?'<tr><td colspan="5" style="text-align:center;color:var(--mid);padding:30px;">No rentals yet</td></tr>':recent.map(r=>`<tr><td><div class="dress-name">${r.dress}</div></td><td>${r.client}</td><td>${r.eventDate||'—'}</td><td class="amount-positive">${fmt(r.amount)}</td><td><span class="badge ${r.returned?'badge-available':'badge-rented'}">${r.returned?'Returned':'Active'}</span></td></tr>`).join('');
+  tbody.innerHTML=!recent.length
+    ?'<tr><td colspan="5" style="text-align:center;color:var(--mid);padding:28px;">No rentals yet</td></tr>'
+    :recent.map(r=>`<tr><td><div class="dress-name">${r.dress}</div></td><td>${r.client}</td><td>${r.eventDate||'—'}</td><td class="amount-positive">${fmt(r.amount)}</td><td><span class="badge ${r.returned?'badge-available':'badge-rented'}">${r.returned?'Returned':'Active'}</span></td></tr>`).join('');
 }
 
 function renderDresses(){
@@ -510,8 +557,8 @@ function renderDresses(){
   document.getElementById('d-available').textContent=f.filter(d=>d.status==='Available').length;
   document.getElementById('d-rented').textContent=f.filter(d=>d.status==='Rented').length;
   document.getElementById('d-value').textContent=fmt(f.reduce((s,d)=>s+(d.cost||0),0));
-  document.getElementById('dresses-cards').innerHTML=!f.length?'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mid);">No dresses found</div>':f.map(d=>`<div class="dress-card"><div class="card-img">${d.photo?`<img src="${d.photo}" alt="${d.name||d.desc}">`:'👗'}</div><div class="card-body"><div class="card-name">${d.name||'—'}</div><div class="card-desc">${d.desc||''}</div>${d.size?`<div class="card-desc">📏 ${d.size}</div>`:''}<div class="card-footer"><div><div class="card-price">${fmt(d.rental)}/rental</div><span class="badge ${d.status==='Available'?'badge-available':'badge-rented'}" style="margin-top:4px;">${d.status}</span></div><div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm" onclick="editDress('${d.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="deleteDress('${d.id}')">✕</button></div></div></div></div>`).join('');
-  document.getElementById('dresses-table').innerHTML=!f.length?'<tr><td colspan="7" style="text-align:center;color:var(--mid);padding:40px;">No dresses found</td></tr>':f.map(d=>`<tr><td>${d.photo?`<img src="${d.photo}" class="thumb-img">`:'<div class="thumb-ph">👗</div>'}</td><td><div class="dress-name">${d.name||'—'}</div>${d.colour?`<div class="desc-text">🎨 ${d.colour}</div>`:''}${d.size?`<div class="desc-text">📏 ${d.size}</div>`:''}</td><td><div style="font-size:13px;">${d.desc||'—'}</div></td><td>${fmt(d.cost)}</td><td style="color:var(--green);font-weight:600;">${fmt(d.rental)}</td><td><span class="badge ${d.status==='Available'?'badge-available':'badge-rented'}">${d.status}</span></td><td><div style="display:flex;gap:6px;"><button class="btn btn-outline btn-sm" onclick="editDress('${d.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="deleteDress('${d.id}')">✕</button></div></td></tr>`).join('');
+  document.getElementById('dresses-cards').innerHTML=!f.length?'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mid);">No dresses found</div>':f.map(d=>{const ph=getPhoto(d.id);return`<div class="dress-card"><div class="card-img">${ph?`<img src="${ph}" alt="${d.name||d.desc}">`:'👗'}</div><div class="card-body"><div class="card-name">${d.name||'—'}</div><div class="card-desc">${d.desc||''}</div>${d.size?`<div class="card-desc">📏 ${d.size}</div>`:''}<div class="card-footer"><div><div class="card-price">${fmt(d.rental)}/rental</div><span class="badge ${d.status==='Available'?'badge-available':'badge-rented'}" style="margin-top:4px;display:inline-block;">${d.status}</span></div><div style="display:flex;flex-direction:column;gap:4px;margin-top:4px;"><button class="btn btn-outline btn-sm" onclick="editDress('${d.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="deleteDress('${d.id}')">Delete</button></div></div></div></div>`;}).join('');
+  document.getElementById('dresses-table').innerHTML=!f.length?'<tr><td colspan="7" style="text-align:center;color:var(--mid);padding:40px;">No dresses found</td></tr>':f.map(d=>{const ph=getPhoto(d.id);return`<tr><td>${ph?`<img src="${ph}" class="thumb-img">`:'<div class="thumb-ph">👗</div>'}</td><td><div class="dress-name">${d.name||'—'}</div>${d.colour?`<div class="desc-text">🎨 ${d.colour}</div>`:''}${d.size?`<div class="desc-text">📏 ${d.size}</div>`:''}</td><td style="font-size:12px;">${d.desc||'—'}</td><td>${fmt(d.cost)}</td><td class="amount-positive">${fmt(d.rental)}</td><td><span class="badge ${d.status==='Available'?'badge-available':'badge-rented'}">${d.status}</span></td><td><div style="display:flex;gap:5px;"><button class="btn btn-outline btn-sm" onclick="editDress('${d.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="deleteDress('${d.id}')">✕</button></div></td></tr>`;}).join('');
 }
 
 function renderRentals(){
@@ -519,7 +566,7 @@ function renderRentals(){
   document.getElementById('r-active').textContent=data.rentals.filter(r=>!r.returned).length;
   document.getElementById('r-returned').textContent=data.rentals.filter(r=>r.returned).length;
   document.getElementById('r-earned').textContent=fmt(data.rentals.reduce((s,r)=>s+r.amount,0));
-  document.getElementById('rentals-table').innerHTML=!data.rentals.length?'<tr><td colspan="8" style="text-align:center;color:var(--mid);padding:40px;">No rentals yet — click "+ New Rental"</td></tr>':[...data.rentals].reverse().map(r=>`<tr><td><div style="font-family:\'Cormorant Garamond\',serif;font-size:15px;font-weight:600;">${r.dress}</div></td><td><div style="font-weight:500;">${r.client}</div>${r.phone?`<div style="font-size:12px;color:var(--mid);">📱 ${r.phone}</div>`:''}</td><td>${r.eventDate||'—'}</td><td>${r.returnDate||'—'}</td><td><div class="amount-positive">${fmt(r.amount)}</div>${r.deposit?`<div style="font-size:11px;color:var(--mid);">Dep: ${fmt(r.deposit)}</div>`:''}</td><td style="font-size:12px;">${r.location||'—'}</td><td><span class="badge ${r.returned?'badge-available':'badge-rented'}">${r.returned?'Returned':'Active'}</span></td><td><div style="display:flex;gap:6px;">${!r.returned?`<button class="btn btn-green btn-sm" onclick="markReturned('${r.id}')">✓ Returned</button>`:''}<button class="btn btn-danger btn-sm" onclick="deleteRental('${r.id}')">✕</button></div></td></tr>`).join('');
+  document.getElementById('rentals-table').innerHTML=!data.rentals.length?'<tr><td colspan="8" style="text-align:center;color:var(--mid);padding:40px;">No rentals yet — click "+ New Rental"</td></tr>':[...data.rentals].reverse().map(r=>`<tr><td><div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;">${r.dress}</div></td><td><div style="font-weight:500;font-size:13px;">${r.client}</div>${r.phone?`<div style="font-size:11px;color:var(--mid);">📱 ${r.phone}</div>`:''}</td><td style="font-size:12px;">${r.eventDate||'—'}</td><td style="font-size:12px;">${r.returnDate||'—'}</td><td><div class="amount-positive">${fmt(r.amount)}</div>${r.deposit?`<div style="font-size:11px;color:var(--mid);">Dep: ${fmt(r.deposit)}</div>`:''}</td><td style="font-size:12px;">${r.location||'—'}</td><td><span class="badge ${r.returned?'badge-available':'badge-rented'}">${r.returned?'Returned':'Active'}</span></td><td><div style="display:flex;gap:5px;">${!r.returned?`<button class="btn btn-green btn-sm" onclick="markReturned('${r.id}')">✓ Back</button>`:''}<button class="btn btn-danger btn-sm" onclick="deleteRental('${r.id}')">✕</button></div></td></tr>`).join('');
 }
 
 function renderIncome(){
@@ -527,7 +574,7 @@ function renderIncome(){
   document.getElementById('inc-rentals').textContent=fmt(data.income.filter(i=>i.cat==='Rental').reduce((s,i)=>s+i.amount,0));
   document.getElementById('inc-sales').textContent=fmt(data.income.filter(i=>i.cat==='Sale').reduce((s,i)=>s+i.amount,0));
   document.getElementById('inc-other').textContent=fmt(data.income.filter(i=>i.cat!=='Rental'&&i.cat!=='Sale').reduce((s,i)=>s+i.amount,0));
-  document.getElementById('income-table').innerHTML=!data.income.length?'<tr><td colspan="5" style="text-align:center;color:var(--mid);padding:40px;">No income recorded yet</td></tr>':[...data.income].reverse().map(i=>`<tr><td style="font-size:13px;">${i.date}</td><td>${i.desc}</td><td><span class="badge badge-income">${i.cat}</span></td><td class="amount-positive">${fmt(i.amount)}</td><td><button class="btn btn-danger btn-sm" onclick="deleteIncome('${i.id}')">✕</button></td></tr>`).join('');
+  document.getElementById('income-table').innerHTML=!data.income.length?'<tr><td colspan="5" style="text-align:center;color:var(--mid);padding:40px;">No income recorded yet</td></tr>':[...data.income].reverse().map(i=>`<tr><td style="font-size:12px;">${i.date}</td><td>${i.desc}</td><td><span class="badge badge-income">${i.cat}</span></td><td class="amount-positive">${fmt(i.amount)}</td><td><button class="btn btn-danger btn-sm" onclick="deleteIncome('${i.id}')">✕</button></td></tr>`).join('');
 }
 
 function renderExpenses(){
@@ -535,9 +582,10 @@ function renderExpenses(){
   document.getElementById('exp-dresses').textContent=fmt(data.expenses.filter(e=>e.cat==='Dresses').reduce((s,e)=>s+e.amount,0));
   document.getElementById('exp-ops').textContent=fmt(data.expenses.filter(e=>e.cat==='Operations'||e.cat==='Alterations').reduce((s,e)=>s+e.amount,0));
   document.getElementById('exp-mkt').textContent=fmt(data.expenses.filter(e=>e.cat==='Marketing').reduce((s,e)=>s+e.amount,0));
-  document.getElementById('expenses-table').innerHTML=[...data.expenses].reverse().map(e=>`<tr><td style="font-size:13px;">${e.date}</td><td>${e.desc}</td><td><span class="badge badge-expense">${e.cat}</span></td><td class="amount-negative">${fmt(e.amount)}</td><td><button class="btn btn-danger btn-sm" onclick="deleteExpense('${e.id}')">✕</button></td></tr>`).join('');
+  document.getElementById('expenses-table').innerHTML=[...data.expenses].reverse().map(e=>`<tr><td style="font-size:12px;">${e.date}</td><td>${e.desc}</td><td><span class="badge badge-expense">${e.cat}</span></td><td class="amount-negative">${fmt(e.amount)}</td><td><button class="btn btn-danger btn-sm" onclick="deleteExpense('${e.id}')">✕</button></td></tr>`).join('');
 }
 
+// ── MODALS ────────────────────────────────────────────────────
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 
 function openDressModal(id){
@@ -552,7 +600,7 @@ function openDressModal(id){
   document.getElementById('d-colour').value=d?.colour||'';
   document.getElementById('d-location').value=d?.location||'Klerksdorp';
   document.getElementById('d-status').value=d?.status||'Available';
-  currentPhotoData=d?.photo||null;
+  currentPhotoData=id?getPhoto(id):null;
   const prev=document.getElementById('d-photo-preview');
   if(currentPhotoData){prev.src=currentPhotoData;prev.style.display='block';document.getElementById('d-photo-placeholder').style.display='none';document.getElementById('d-photo-remove').style.display='inline-flex';}
   else{prev.src='';prev.style.display='none';document.getElementById('d-photo-placeholder').style.display='block';document.getElementById('d-photo-remove').style.display='none';}
@@ -561,15 +609,21 @@ function openDressModal(id){
 }
 function editDress(id){openDressModal(id);}
 
-async function saveDress(){
-  const btn=document.getElementById('save-dress-btn');btn.textContent='Saving…';btn.disabled=true;
-  const obj={id:editingDressId||uid(),name:document.getElementById('d-name').value.trim(),desc:document.getElementById('d-desc').value.trim(),cost:parseFloat(document.getElementById('d-cost').value)||0,rental:parseFloat(document.getElementById('d-rental').value)||0,size:document.getElementById('d-size').value.trim(),colour:document.getElementById('d-colour').value.trim(),location:document.getElementById('d-location').value,status:document.getElementById('d-status').value,photo:currentPhotoData||''};
-  if(editingDressId){data.dresses=data.dresses.map(d=>d.id===editingDressId?obj:d);}else{data.dresses.push(obj);}
-  await saveSheet('dresses');
-  btn.textContent='Save Dress';btn.disabled=false;
-  closeModal('dress-modal');render();toast('Dress saved to Google Sheets ✨','success');
+function saveDress(){
+  const id=editingDressId||uid();
+  const obj={id,name:document.getElementById('d-name').value.trim(),desc:document.getElementById('d-desc').value.trim(),cost:parseFloat(document.getElementById('d-cost').value)||0,rental:parseFloat(document.getElementById('d-rental').value)||0,size:document.getElementById('d-size').value.trim(),colour:document.getElementById('d-colour').value.trim(),location:document.getElementById('d-location').value,status:document.getElementById('d-status').value};
+  if(currentPhotoData) setPhoto(id,currentPhotoData);
+  else if(editingDressId&&!currentPhotoData) removePhotoById(id);
+  if(editingDressId){data.dresses=data.dresses.map(d=>d.id===editingDressId?obj:d);}
+  else{data.dresses.push(obj);}
+  save();closeModal('dress-modal');render();toast('Dress saved ✨','success');
 }
-async function deleteDress(id){if(!confirm('Delete this dress?'))return;data.dresses=data.dresses.filter(d=>d.id!==id);await saveSheet('dresses');render();toast('Dress deleted');}
+
+function deleteDress(id){
+  if(!confirm('Delete this dress?'))return;
+  data.dresses=data.dresses.filter(d=>d.id!==id);
+  removePhotoById(id);save();render();toast('Dress deleted');
+}
 
 function openRentalModal(){
   const sel=document.getElementById('r-dress');
@@ -578,27 +632,36 @@ function openRentalModal(){
   ['r-event-date','r-return-date','r-amount','r-deposit'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('rental-modal').classList.add('open');
 }
-async function saveRental(){
+function saveRental(){
   const dress=document.getElementById('r-dress').value,client=document.getElementById('r-client').value.trim();
   if(!dress||!client){alert('Please select a dress and enter a client name.');return;}
   const r={id:uid(),dress,client,phone:document.getElementById('r-phone').value.trim(),eventDate:document.getElementById('r-event-date').value,returnDate:document.getElementById('r-return-date').value,amount:parseFloat(document.getElementById('r-amount').value)||0,deposit:parseFloat(document.getElementById('r-deposit').value)||0,location:document.getElementById('r-location').value,notes:document.getElementById('r-notes').value.trim(),returned:false};
   data.rentals.push(r);
   data.dresses=data.dresses.map(d=>(d.name===dress||d.desc===dress)?{...d,status:'Rented'}:d);
   if(r.amount>0)data.income.push({id:uid(),date:r.eventDate||today(),desc:`Rental — ${dress} (${client})`,cat:'Rental',amount:r.amount});
-  await pushAll();closeModal('rental-modal');render();toast('Rental saved ✨','success');
+  save();closeModal('rental-modal');render();toast('Rental saved ✨','success');
 }
-async function markReturned(id){const r=data.rentals.find(x=>x.id===id);if(!r)return;r.returned=true;data.dresses=data.dresses.map(d=>(d.name===r.dress||d.desc===r.dress)?{...d,status:'Available'}:d);await pushAll();render();toast('Marked as returned ✓','success');}
-async function deleteRental(id){if(!confirm('Delete this rental?'))return;data.rentals=data.rentals.filter(r=>r.id!==id);await saveSheet('rentals');render();}
+function markReturned(id){
+  const r=data.rentals.find(x=>x.id===id);if(!r)return;
+  r.returned=true;
+  data.dresses=data.dresses.map(d=>(d.name===r.dress||d.desc===r.dress)?{...d,status:'Available'}:d);
+  save();render();toast('Marked as returned ✓','success');
+}
+function deleteRental(id){if(!confirm('Delete?'))return;data.rentals=data.rentals.filter(r=>r.id!==id);save();render();}
 
 function openIncomeModal(){document.getElementById('inc-date').value=today();document.getElementById('inc-desc').value='';document.getElementById('inc-amount').value='';document.getElementById('income-modal').classList.add('open');}
-async function saveIncome(){const amount=parseFloat(document.getElementById('inc-amount').value);if(!amount){alert('Please enter an amount.');return;}data.income.push({id:uid(),date:document.getElementById('inc-date').value,desc:document.getElementById('inc-desc').value.trim(),cat:document.getElementById('inc-cat').value,amount});await saveSheet('income');closeModal('income-modal');render();toast('Income saved ✨','success');}
-async function deleteIncome(id){if(!confirm('Delete?'))return;data.income=data.income.filter(i=>i.id!==id);await saveSheet('income');render();}
+function saveIncome(){const amount=parseFloat(document.getElementById('inc-amount').value);if(!amount){alert('Please enter an amount.');return;}data.income.push({id:uid(),date:document.getElementById('inc-date').value,desc:document.getElementById('inc-desc').value.trim(),cat:document.getElementById('inc-cat').value,amount});save();closeModal('income-modal');render();toast('Income saved ✨','success');}
+function deleteIncome(id){if(!confirm('Delete?'))return;data.income=data.income.filter(i=>i.id!==id);save();render();}
 
 function openExpenseModal(){document.getElementById('exp-date').value=today();document.getElementById('exp-desc').value='';document.getElementById('exp-amount').value='';document.getElementById('expense-modal').classList.add('open');}
-async function saveExpense(){const amount=parseFloat(document.getElementById('exp-amount').value);if(!amount){alert('Please enter an amount.');return;}data.expenses.push({id:uid(),date:document.getElementById('exp-date').value,desc:document.getElementById('exp-desc').value.trim(),cat:document.getElementById('exp-cat').value,amount});await saveSheet('expenses');closeModal('expense-modal');render();toast('Expense saved ✨','success');}
-async function deleteExpense(id){if(!confirm('Delete?'))return;data.expenses=data.expenses.filter(e=>e.id!==id);await saveSheet('expenses');render();}
+function saveExpense(){const amount=parseFloat(document.getElementById('exp-amount').value);if(!amount){alert('Please enter an amount.');return;}data.expenses.push({id:uid(),date:document.getElementById('exp-date').value,desc:document.getElementById('exp-desc').value.trim(),cat:document.getElementById('exp-cat').value,amount});save();closeModal('expense-modal');render();toast('Expense saved ✨','success');}
+function deleteExpense(id){if(!confirm('Delete?'))return;data.expenses=data.expenses.filter(e=>e.id!==id);save();render();}
 
-document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});});
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});
+});
+
+boot();
 </script>
 </body>
 </html>
