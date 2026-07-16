@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Once Upon a Dress — Business Manager</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+:root{--gold:#C9A84C;--gold-light:#E8D5A3;--gold-pale:#FBF7EE;--pink:#D45380;--pink-light:#F9EDF2;--cream:#FDFAF5;--charcoal:#2C2C2C;--mid:#6B6B6B;--border:#E8E0D0;--green:#4CAF7D;--green-light:#EDF7F2;--red:#E05252;--red-light:#FDEAEA;--blue:#5B8DD9;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--charcoal);min-height:100vh;}
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;text-align:center;}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;color:var(--charcoal);margin-bottom:8px;}
+.login-logo span{font-style:italic;color:var(--gold);}
+.login-tagline{font-size:13px;color:var(--mid);margin-bottom:48px;letter-spacing:0.08em;}
+.login-card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:40px;max-width:400px;width:100%;}
+.login-card h2{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;margin-bottom:8px;}
+.login-card p{font-size:13px;color:var(--mid);margin-bottom:28px;line-height:1.6;}
+.sync-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:5px;vertical-align:middle;}
+.sync-dot.syncing{background:var(--gold);animation:pulse 1s infinite;}
+.sync-dot.error{background:var(--red);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+@keyframes spin{to{transform:rotate(360deg);}}
+#app{display:none;}
+header{background:var(--charcoal);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--gold);letter-spacing:0.05em;}
+.logo span{font-style:italic;color:#fff;}
+.header-right{display:flex;align-items:center;gap:12px;}
+.user-pill{font-size:12px;color:var(--gold-light);background:rgba(255,255,255,0.08);padding:5px 12px;border-radius:20px;}
+.sync-badge{font-size:11px;color:#fff;display:flex;align-items:center;gap:5px;cursor:pointer;}
+nav{background:#fff;border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 24px;}
+nav button{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--mid);background:none;border:none;border-bottom:2px solid transparent;padding:14px 20px;cursor:pointer;white-space:nowrap;transition:all 0.15s;text-transform:uppercase;}
+nav button.active{color:var(--gold);border-bottom-color:var(--gold);}
+main{padding:24px;max-width:1100px;margin:0 auto;}
+.section{display:none;}.section.active{display:block;}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;}
+.stat-card .label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--mid);margin-bottom:8px;}
+.stat-card .value{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;line-height:1;}
+.stat-card .sub{font-size:12px;color:var(--mid);margin-top:4px;}
+.stat-card.gold{border-top:3px solid var(--gold);}.stat-card.pink{border-top:3px solid var(--pink);}.stat-card.green{border-top:3px solid var(--green);}.stat-card.blue{border-top:3px solid var(--blue);}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;}
+.btn{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px;}
+.btn-gold{background:var(--gold);color:#fff;}.btn-gold:hover{background:#b8943d;}
+.btn-outline{background:#fff;color:var(--charcoal);border:1px solid var(--border);}.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.btn-sm{font-size:12px;padding:5px 10px;border-radius:6px;}
+.btn-danger{background:var(--red-light);color:var(--red);border:none;}.btn-danger:hover{background:var(--red);color:#fff;}
+.btn-green{background:var(--green);color:#fff;}.btn-green:hover{background:#3d9e6a;}
+.btn-signout{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);font-size:12px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.view-toggle{display:flex;gap:6px;}
+.view-btn{background:#fff;border:1px solid var(--border);border-radius:7px;padding:6px 12px;cursor:pointer;font-size:13px;color:var(--mid);}
+.view-btn.active{background:var(--gold);color:#fff;border-color:var(--gold);}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;}
+.dress-card{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform 0.15s,box-shadow 0.15s;}
+.dress-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.08);}
+.card-img{width:100%;aspect-ratio:3/4;background:var(--gold-pale);display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--gold-light);overflow:hidden;}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.card-body{padding:12px 14px;}
+.card-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;}
+.card-desc{font-size:11px;color:var(--mid);margin-top:2px;line-height:1.4;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+.card-price{font-size:14px;font-weight:600;color:var(--green);}
+.table-wrap{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+thead{background:var(--gold-pale);}
+th{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--mid);padding:12px 16px;text-align:left;}
+td{padding:13px 16px;font-size:14px;border-top:1px solid var(--border);vertical-align:middle;}
+tr:hover td{background:var(--gold-pale);}
+.dress-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;}
+.desc-text{font-size:12px;color:var(--mid);margin-top:2px;}
+.thumb-img{width:52px;height:64px;object-fit:cover;border-radius:6px;border:1px solid var(--border);}
+.thumb-ph{width:52px;height:64px;background:var(--gold-pale);border-radius:6px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;}
+.badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;}
+.badge-available{background:var(--green-light);color:var(--green);}
+.badge-rented{background:var(--pink-light);color:var(--pink);}
+.badge-income{background:var(--green-light);color:var(--green);}
+.badge-expense{background:var(--red-light);color:var(--red);}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:16px;padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:24px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--mid);margin-bottom:6px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;font-family:'Inter',sans-serif;font-size:14px;border:1px solid var(--border);border-radius:8px;background:var(--cream);color:var(--charcoal);outline:none;transition:border-color 0.15s;}
+.form-group input:focus,.form-group select:focus{border-color:var(--gold);}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;}
+.photo-upload-area{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:border-color 0.15s;background:var(--cream);}
+.photo-upload-area:hover{border-color:var(--gold);}
+.photo-preview{width:100%;max-height:220px;object-fit:cover;border-radius:8px;margin-top:10px;display:none;}
+.summary-box{background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:12px;padding:20px 24px;margin-bottom:20px;display:flex;gap:32px;flex-wrap:wrap;}
+.s-label{font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--mid);margin-bottom:4px;}
+.s-value{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;}
+.search-bar{position:relative;margin-bottom:16px;}
+.search-bar input{width:100%;padding:10px 14px 10px 36px;font-family:'Inter',sans-serif;font-size:14px;border:1px solid var(--border);border-radius:8px;background:#fff;outline:none;}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mid);}
+.amount-positive{color:var(--green);font-weight:600;}
+.amount-negative{color:var(--red);font-weight:600;}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--charcoal);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transform:translateY(10px);transition:all 0.25s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.success{background:var(--green);}
+.toast.error{background:var(--red);}
+.loading-overlay{position:fixed;inset:0;background:rgba(253,250,245,0.92);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.spinner{width:36px;height:36px;border:3px solid var(--gold-light);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;}
+.loading-text{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--charcoal);}
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-logo">Once Upon a <span>Dress</span></div>
+  <div class="login-tagline">GOWNS · FAIRYTALES · MAGIC MOMENTS</div>
+  <div class="login-card">
+    <h2>Business Manager</h2>
+    <p>Sign in with your Google account to access the shared dress collection, rentals, income and expenses — synced between Leonize and Cecelia in real time.</p>
+    <div id="google-signin-btn"></div>
+    <div id="login-status" style="font-size:12px;color:var(--mid);margin-top:12px;min-height:18px;"></div>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loading" style="display:none;">
+  <div class="spinner"></div>
+  <div class="loading-text">Syncing with Google Sheets…</div>
+</div>
+
+<div id="app">
+  <header>
+    <div class="logo">Once Upon a <span>Dress</span></div>
+    <div class="header-right">
+      <div class="sync-badge" onclick="syncAll()" title="Tap to refresh">
+        <span class="sync-dot" id="sync-dot"></span>
+        <span id="sync-label">Synced</span>
+      </div>
+      <div class="user-pill" id="user-name"></div>
+      <button class="btn-signout" onclick="signOut()">Sign out</button>
+    </div>
+  </header>
+  <nav>
+    <button class="active" onclick="showSection('dashboard',this)">Dashboard</button>
+    <button onclick="showSection('dresses',this)">👗 Dresses</button>
+    <button onclick="showSection('rentals',this)">📅 Rentals</button>
+    <button onclick="showSection('income',this)">💰 Income</button>
+    <button onclick="showSection('expenses',this)">🧾 Expenses</button>
+  </nav>
+  <main>
+
+    <div id="dashboard" class="section active">
+      <div class="section-header" style="margin-bottom:24px;">
+        <h1 class="section-title">Good day ✨</h1>
+        <button class="btn btn-outline" onclick="syncAll()">🔄 Sync now</button>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card gold"><div class="label">Total Dresses</div><div class="value" id="stat-total-dresses">0</div><div class="sub">in collection</div></div>
+        <div class="stat-card pink"><div class="label">Currently Rented</div><div class="value" id="stat-rented">0</div><div class="sub">dresses out</div></div>
+        <div class="stat-card green"><div class="label">Total Income</div><div class="value" id="stat-income">R0</div><div class="sub">all time</div></div>
+        <div class="stat-card blue"><div class="label">Total Expenses</div><div class="value" id="stat-expenses">R0</div><div class="sub">all time</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+        <div class="stat-card" style="border-top:3px solid var(--green);"><div class="label">Dress Investment</div><div class="value" style="font-size:24px;">R13 650</div><div class="sub">purchase cost of collection</div></div>
+        <div class="stat-card" style="border-top:3px solid var(--gold);"><div class="label">Leo's Investment</div><div class="value" style="font-size:24px;">R20 000</div><div class="sub">R3 100 remaining</div></div>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Recent Rentals</th><th>Client</th><th>Event Date</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody id="dashboard-rentals"><tr><td colspan="5" style="text-align:center;color:var(--mid);padding:30px;">No rentals yet</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <div id="dresses" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Dress Collection</h2>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <div class="view-toggle">
+            <button class="view-btn active" id="vbtn-card" onclick="setView('card')">⊞ Cards</button>
+            <button class="view-btn" id="vbtn-table" onclick="setView('table')">☰ Table</button>
+          </div>
+          <button class="btn btn-gold" onclick="openDressModal()">+ Add Dress</button>
+        </div>
+      </div>
+      <div class="summary-box">
+        <div><div class="s-label">Total</div><div class="s-value" id="d-count">0</div></div>
+        <div><div class="s-label">Available</div><div class="s-value" id="d-available" style="color:var(--green);">0</div></div>
+        <div><div class="s-label">Rented Out</div><div class="s-value" id="d-rented" style="color:var(--pink);">0</div></div>
+        <div><div class="s-label">Collection Value</div><div class="s-value" id="d-value">R0</div></div>
+      </div>
+      <div class="search-bar"><span class="search-icon">🔍</span><input type="text" placeholder="Search dresses…" oninput="filterDresses(this.value)"></div>
+      <div class="card-grid" id="dresses-cards" style="margin-bottom:8px;"></div>
+      <div class="table-wrap" id="dresses-table-wrap" style="display:none;">
+        <table><thead><tr><th>Photo</th><th>Name</th><th>Description</th><th>Cost</th><th>Rental</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="dresses-table"></tbody></table>
+      </div>
+    </div>
+
+    <div id="rentals" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Rentals</h2>
+        <button class="btn btn-gold" onclick="openRentalModal()">+ New Rental</button>
+      </div>
+      <div class="summary-box">
+        <div><div class="s-label">Total Rentals</div><div class="s-value" id="r-count">0</div></div>
+        <div><div class="s-label">Active</div><div class="s-value" id="r-active" style="color:var(--pink);">0</div></div>
+        <div><div class="s-label">Returned</div><div class="s-value" id="r-returned" style="color:var(--green);">0</div></div>
+        <div><div class="s-label">Total Earned</div><div class="s-value" id="r-earned">R0</div></div>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Dress</th><th>Client</th><th>Event Date</th><th>Return Date</th><th>Amount</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="rentals-table"></tbody></table>
+      </div>
+    </div>
+
+    <div id="income" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Income</h2>
+        <button class="btn btn-gold" onclick="openIncomeModal()">+ Add Income</button>
+      </div>
+      <div class="summary-box">
+        <div><div class="s-label">Total Income</div><div class="s-value" id="inc-total" style="color:var(--green);">R0</div></div>
+        <div><div class="s-label">Rentals</div><div class="s-value" id="inc-rentals">R0</div></div>
+        <div><div class="s-label">Sales</div><div class="s-value" id="inc-sales">R0</div></div>
+        <div><div class="s-label">Other</div><div class="s-value" id="inc-other">R0</div></div>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr></thead>
+        <tbody id="income-table"></tbody></table>
+      </div>
+    </div>
+
+    <div id="expenses" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Expenses</h2>
+        <button class="btn btn-gold" onclick="openExpenseModal()">+ Add Expense</button>
+      </div>
+      <div class="summary-box">
+        <div><div class="s-label">Total Expenses</div><div class="s-value" id="exp-total" style="color:var(--red);">R0</div></div>
+        <div><div class="s-label">Dresses</div><div class="s-value" id="exp-dresses">R0</div></div>
+        <div><div class="s-label">Operations</div><div class="s-value" id="exp-ops">R0</div></div>
+        <div><div class="s-label">Marketing</div><div class="s-value" id="exp-mkt">R0</div></div>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr></thead>
+        <tbody id="expenses-table"></tbody></table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- DRESS MODAL -->
+<div class="modal-overlay" id="dress-modal">
+  <div class="modal">
+    <div class="modal-title" id="dress-modal-title">Add Dress</div>
+    <div class="form-group"><label>Dress Name</label><input type="text" id="d-name" placeholder="e.g. Rose"></div>
+    <div class="form-group"><label>Description</label><input type="text" id="d-desc" placeholder="e.g. Pienk styf blinkers"></div>
+    <div class="form-group"><label>Cost Price (R)</label><input type="number" id="d-cost" placeholder="800"></div>
+    <div class="form-group"><label>Rental Price (R)</label><input type="number" id="d-rental" placeholder="350"></div>
+    <div class="form-group"><label>Size</label><input type="text" id="d-size" placeholder="e.g. 32, 34-36"></div>
+    <div class="form-group"><label>Colour</label><input type="text" id="d-colour" placeholder="e.g. Pink"></div>
+    <div class="form-group"><label>Location</label>
+      <select id="d-location"><option value="Klerksdorp">Klerksdorp</option><option value="Potchefstroom">Potchefstroom</option><option value="Both">Both</option></select>
+    </div>
+    <div class="form-group"><label>Status</label>
+      <select id="d-status"><option value="Available">Available</option><option value="Rented">Rented</option><option value="In Alterations">In Alterations</option></select>
+    </div>
+    <div class="form-group">
+      <label>Photo</label>
+      <div class="photo-upload-area" onclick="document.getElementById('d-photo-input').click()">
+        <input type="file" id="d-photo-input" accept="image/*" onchange="previewPhoto(event)" style="display:none;">
+        <div id="d-photo-placeholder">📷<br><span style="font-size:12px;color:var(--mid);margin-top:6px;display:block;">Tap to upload a photo</span></div>
+        <img id="d-photo-preview" class="photo-preview" alt="Dress preview">
+      </div>
+      <button type="button" class="btn btn-outline btn-sm" id="d-photo-remove" onclick="removePhoto()" style="margin-top:8px;display:none;">Remove photo</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('dress-modal')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveDress()" id="save-dress-btn">Save Dress</button>
+    </div>
+  </div>
+</div>
+
+<!-- RENTAL MODAL -->
+<div class="modal-overlay" id="rental-modal">
+  <div class="modal">
+    <div class="modal-title">New Rental</div>
+    <div class="form-group"><label>Dress</label><select id="r-dress"><option value="">Select dress…</option></select></div>
+    <div class="form-group"><label>Client Name</label><input type="text" id="r-client" placeholder="Client name"></div>
+    <div class="form-group"><label>Client WhatsApp</label><input type="text" id="r-phone" placeholder="083 123 4567"></div>
+    <div class="form-group"><label>Event Date</label><input type="date" id="r-event-date"></div>
+    <div class="form-group"><label>Return Date</label><input type="date" id="r-return-date"></div>
+    <div class="form-group"><label>Rental Amount (R)</label><input type="number" id="r-amount" placeholder="350"></div>
+    <div class="form-group"><label>Deposit Paid (R)</label><input type="number" id="r-deposit" placeholder="0"></div>
+    <div class="form-group"><label>Location</label>
+      <select id="r-location"><option value="Klerksdorp">Klerksdorp</option><option value="Potchefstroom">Potchefstroom</option></select>
+    </div>
+    <div class="form-group"><label>Notes</label><textarea id="r-notes" rows="2" placeholder="Any notes…"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('rental-modal')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveRental()">Save Rental</button>
+    </div>
+  </div>
+</div>
+
+<!-- INCOME MODAL -->
+<div class="modal-overlay" id="income-modal">
+  <div class="modal">
+    <div class="modal-title">Add Income</div>
+    <div class="form-group"><label>Date</label><input type="date" id="inc-date"></div>
+    <div class="form-group"><label>Description</label><input type="text" id="inc-desc" placeholder="e.g. Rental — Rose dress"></div>
+    <div class="form-group"><label>Category</label>
+      <select id="inc-cat"><option value="Rental">Rental</option><option value="Sale">Sale</option><option value="Deposit">Deposit</option><option value="Other">Other</option></select>
+    </div>
+    <div class="form-group"><label>Amount (R)</label><input type="number" id="inc-amount" placeholder="350"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('income-modal')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveIncome()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPENSE MODAL -->
+<div class="modal-overlay" id="expense-modal">
+  <div class="modal">
+    <div class="modal-title">Add Expense</div>
+    <div class="form-group"><label>Date</label><input type="date" id="exp-date"></div>
+    <div class="form-group"><label>Description</label><input type="text" id="exp-desc" placeholder="e.g. Clothing rack"></div>
+    <div class="form-group"><label>Category</label>
+      <select id="exp-cat"><option value="Dresses">Dresses</option><option value="Operations">Operations</option><option value="Marketing">Marketing</option><option value="Alterations">Alterations</option><option value="Other">Other</option></select>
+    </div>
+    <div class="form-group"><label>Amount (R)</label><input type="number" id="exp-amount" placeholder="600"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('expense-modal')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveExpense()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CLIENT_ID='835809340788-hd78ajdt667k8acib7jg6o211l39tcud.apps.googleusercontent.com';
+const SHEET_ID='1-3fZSeroczpJ39aAtVRtUVEskOSIUjHCPfKsgV84LmY';
+const SCOPES='https://www.googleapis.com/auth/spreadsheets';
+const SN={dresses:'Dresses',rentals:'Rentals',income:'Income',expenses:'Expenses'};
+const HDRS={dresses:['id','name','desc','cost','rental','size','colour','location','status','photo'],rentals:['id','dress','client','phone','eventDate','returnDate','amount','deposit','location','notes','returned'],income:['id','date','desc','cat','amount'],expenses:['id','date','desc','cat','amount']};
+
+let accessToken=null,data={dresses:[],rentals:[],income:[],expenses:[]},dressFilter='',dressView='card',currentPhotoData=null,editingDressId=null,isSyncing=false;
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function fmt(n){return 'R'+Number(n||0).toLocaleString('en-ZA');}
+function today(){return new Date().toISOString().split('T')[0];}
+function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type?' '+type:'');setTimeout(()=>t.className='toast',3000);}
+function setSS(s){const d=document.getElementById('sync-dot'),l=document.getElementById('sync-label');if(s==='syncing'){d.className='sync-dot syncing';l.textContent='Syncing…';}else if(s==='error'){d.className='sync-dot error';l.textContent='Sync error';}else{d.className='sync-dot';l.textContent='Synced';}}
+function showLoading(v){document.getElementById('loading').style.display=v?'flex':'none';}
+function parseJwt(t){try{return JSON.parse(atob(t.split('.')[1]));}catch(e){return {};}}
+
+window.onload=function(){
+  google.accounts.id.initialize({client_id:CLIENT_ID,callback:handleCredential,auto_select:false});
+  google.accounts.id.renderButton(document.getElementById('google-signin-btn'),{theme:'outline',size:'large',text:'signin_with',width:320});
+};
+
+function handleCredential(response){
+  const tc=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:SCOPES,callback:async(tr)=>{
+    if(tr.error){document.getElementById('login-status').innerHTML='<span style="color:var(--red);">Error: '+tr.error+'</span>';return;}
+    accessToken=tr.access_token;
+    const p=parseJwt(response.credential);
+    document.getElementById('user-name').textContent=p.name||p.email;
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    showLoading(true);
+    await ensureSheets();
+    await loadAll();
+    showLoading(false);
+    render();
+    toast('Welcome! Data synced ✨','success');
+  }});
+  tc.requestAccessToken({prompt:''});
+}
+
+function signOut(){google.accounts.id.disableAutoSelect();accessToken=null;data={dresses:[],rentals:[],income:[],expenses:[]};document.getElementById('app').style.display='none';document.getElementById('login-screen').style.display='flex';}
+
+async function api(method,ep,body){
+  const r=await fetch('https://sheets.googleapis.com/v4/spreadsheets/'+SHEET_ID+ep,{method,headers:{'Authorization':'Bearer '+accessToken,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+  if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API error');}
+  return r.json();
+}
+
+async function ensureSheets(){
+  const info=await api('GET','');
+  const existing=info.sheets.map(s=>s.properties.title);
+  const needed=Object.values(SN).filter(n=>!existing.includes(n));
+  if(!needed.length)return;
+  await api('POST',':batchUpdate',{requests:needed.map(title=>({addSheet:{properties:{title}}}))});
+  const hmap={Dresses:HDRS.dresses,Rentals:HDRS.rentals,Income:HDRS.income,Expenses:HDRS.expenses};
+  for(const name of needed){await api('PUT',`/values/${name}!A1:Z1?valueInputOption=RAW`,{values:[hmap[name]]});}
+}
+
+async function readSheet(name){
+  try{
+    const r=await api('GET',`/values/${name}`);
+    const rows=r.values||[];
+    if(rows.length<2)return[];
+    const h=rows[0];
+    return rows.slice(1).map(row=>{
+      const o={};
+      h.forEach((k,i)=>{o[k]=row[i]||'';});
+      ['cost','rental','amount','deposit'].forEach(k=>{if(o[k]!==undefined)o[k]=parseFloat(o[k])||0;});
+      if(o.returned!==undefined)o.returned=o.returned==='true';
+      return o;
+    });
+  }catch(e){console.warn('readSheet',name,e);return[];}
+}
+
+async function writeSheet(name,records,hdrs){
+  const values=[hdrs,...records.map(r=>hdrs.map(h=>{const v=r[h];if(v===undefined||v===null)return'';return String(v);}))];
+  await api('PUT',`/values/${name}?valueInputOption=RAW`,{range:name,values});
+}
+
+async function loadAll(){
+  const [d,r,i,e]=await Promise.all([readSheet(SN.dresses),readSheet(SN.rentals),readSheet(SN.income),readSheet(SN.expenses)]);
+  if(!d.length){data.dresses=defaultDresses();data.rentals=r;data.income=i;data.expenses=defaultExpenses();await pushAll();}
+  else{data={dresses:d,rentals:r,income:i,expenses:e};}
+}
+
+async function pushAll(){
+  setSS('syncing');
+  try{await Promise.all([writeSheet(SN.dresses,data.dresses,HDRS.dresses),writeSheet(SN.rentals,data.rentals,HDRS.rentals),writeSheet(SN.income,data.income,HDRS.income),writeSheet(SN.expenses,data.expenses,HDRS.expenses)]);setSS('ok');}
+  catch(e){setSS('error');toast('Sync error: '+e.message,'error');}
+}
+async function saveSheet(k){setSS('syncing');try{await writeSheet(SN[k],data[k],HDRS[k]);setSS('ok');}catch(e){setSS('error');toast('Save error','error');}}
+async function syncAll(){if(isSyncing)return;isSyncing=true;setSS('syncing');try{await loadAll();render();setSS('ok');toast('Refreshed ✨','success');}catch(e){setSS('error');toast('Sync failed','error');}isSyncing=false;}
+
+function defaultDresses(){
+  const L='Klerksdorp';
+  return [
+    {id:uid(),name:'Rose',desc:'Pienk styf blinkers',cost:800,rental:350,size:'',colour:'Pink',location:L,status:'Available',photo:''},
+    {id:uid(),name:'Scarlett',desc:'Maroon, straps, plain',cost:500,rental:250,size:'',colour:'Maroon',location:L,status:'Available',photo:''},
+    {id:uid(),name:'Obsidian',desc:'Swart, straps, plain',cost:500,rental:250,size:'',colour:'Black',location:L,status:'Available',photo:''},
+    {id:uid(),name:'Martini',desc:'Swart blinkers',cost:500,rental:250,size:'',colour:'Black',location:L,status:'Available',photo:''},
+    {id:uid(),name:'Rosette',desc:'Swart/blou blomme, styf bo en uit',cost:900,rental:400,size:'',colour:'Black/Blue',location:L,status:'Available',photo:''},
+    {id:uid(),name:'Cosmic',desc:'Donker Blou, blinkers, straps',cost:400,rental:200,size:'',colour:'Dark Blue',location:L,status:'Available',photo:''},
+    {id:uid(),name:'Ciel',desc:'Lig blou, cinderella vibes dikker bandjies',cost:1500,rental:600,size:'',colour:'Light Blue',location:L,status:'Available',photo:''},
+    {id:uid(),name:'Tiana',desc:'Helder Groen, strapless',cost:600,rental:300,size:'',colour:'Green',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Lig blou, plain, flowy',cost:400,rental:200,size:'',colour:'Light Blue',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Glitter one shoulder',cost:200,rental:150,size:'',colour:'Glitter',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Red with bow - short',cost:350,rental:200,size:'',colour:'Red',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Black with bow - short',cost:350,rental:200,size:'',colour:'Black',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Maroon sparkle one shoulder with small bow - long',cost:500,rental:250,size:'',colour:'Maroon',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Pink Mesh dress',cost:900,rental:400,size:'',colour:'Pink',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Burnt orange high waisted fishbone',cost:1000,rental:450,size:'',colour:'Orange',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Sequin Mesh Maroon princess dress',cost:1400,rental:600,size:'',colour:'Maroon',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Pastel Yellow flow - plain',cost:600,rental:300,size:'',colour:'Yellow',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Baby pink, strapless with bow - princess dress',cost:700,rental:350,size:'',colour:'Baby Pink',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Black tight long strapless',cost:650,rental:300,size:'',colour:'Black',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Bright red sparkle one shoulder long',cost:600,rental:300,size:'',colour:'Red',location:L,status:'Available',photo:''},
+    {id:uid(),name:'',desc:'Turquoise sparkle medium/long',cost:300,rental:200,size:'',colour:'Turquoise',location:L,status:'Available',photo:''},
+  ];
+}
+function defaultExpenses(){
+  return [
+    {id:uid(),date:'2025-01-01',desc:'Dresses - initial purchase',cat:'Dresses',amount:13650},
+    {id:uid(),date:'2025-01-01',desc:'Clothing rack',cat:'Operations',amount:600},
+    {id:uid(),date:'2025-01-01',desc:'Register company',cat:'Operations',amount:170},
+    {id:uid(),date:'2025-01-01',desc:'Dress adjustments',cat:'Alterations',amount:2000},
+    {id:uid(),date:'2025-01-01',desc:'Dress bags',cat:'Operations',amount:480},
+  ];
+}
+
+function showSection(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  render();
+}
+function setView(v){dressView=v;document.getElementById('vbtn-card').classList.toggle('active',v==='card');document.getElementById('vbtn-table').classList.toggle('active',v==='table');document.getElementById('dresses-cards').style.display=v==='card'?'grid':'none';document.getElementById('dresses-table-wrap').style.display=v==='table'?'block':'none';}
+function filterDresses(v){dressFilter=v.toLowerCase();renderDresses();}
+
+function previewPhoto(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
+      const MAX=800;let w=img.width,h=img.height;
+      if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
+      const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+      currentPhotoData=c.toDataURL('image/jpeg',0.75);
+      const p=document.getElementById('d-photo-preview');p.src=currentPhotoData;p.style.display='block';
+      document.getElementById('d-photo-placeholder').style.display='none';
+      document.getElementById('d-photo-remove').style.display='inline-flex';
+    };img.src=ev.target.result;
+  };reader.readAsDataURL(file);
+}
+function removePhoto(){currentPhotoData=null;document.getElementById('d-photo-preview').style.display='none';document.getElementById('d-photo-preview').src='';document.getElementById('d-photo-placeholder').style.display='block';document.getElementById('d-photo-remove').style.display='none';document.getElementById('d-photo-input').value='';}
+
+function render(){renderDashboard();renderDresses();renderRentals();renderIncome();renderExpenses();}
+
+function renderDashboard(){
+  document.getElementById('stat-total-dresses').textContent=data.dresses.length;
+  document.getElementById('stat-rented').textContent=data.dresses.filter(d=>d.status==='Rented').length;
+  document.getElementById('stat-income').textContent=fmt(data.income.reduce((s,i)=>s+i.amount,0));
+  document.getElementById('stat-expenses').textContent=fmt(data.expenses.reduce((s,e)=>s+e.amount,0));
+  const tbody=document.getElementById('dashboard-rentals');
+  const recent=[...data.rentals].reverse().slice(0,5);
+  tbody.innerHTML=!recent.length?'<tr><td colspan="5" style="text-align:center;color:var(--mid);padding:30px;">No rentals yet</td></tr>':recent.map(r=>`<tr><td><div class="dress-name">${r.dress}</div></td><td>${r.client}</td><td>${r.eventDate||'—'}</td><td class="amount-positive">${fmt(r.amount)}</td><td><span class="badge ${r.returned?'badge-available':'badge-rented'}">${r.returned?'Returned':'Active'}</span></td></tr>`).join('');
+}
+
+function renderDresses(){
+  const f=data.dresses.filter(d=>!dressFilter||(d.name||'').toLowerCase().includes(dressFilter)||(d.desc||'').toLowerCase().includes(dressFilter)||(d.colour||'').toLowerCase().includes(dressFilter));
+  document.getElementById('d-count').textContent=f.length;
+  document.getElementById('d-available').textContent=f.filter(d=>d.status==='Available').length;
+  document.getElementById('d-rented').textContent=f.filter(d=>d.status==='Rented').length;
+  document.getElementById('d-value').textContent=fmt(f.reduce((s,d)=>s+(d.cost||0),0));
+  document.getElementById('dresses-cards').innerHTML=!f.length?'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mid);">No dresses found</div>':f.map(d=>`<div class="dress-card"><div class="card-img">${d.photo?`<img src="${d.photo}" alt="${d.name||d.desc}">`:'👗'}</div><div class="card-body"><div class="card-name">${d.name||'—'}</div><div class="card-desc">${d.desc||''}</div>${d.size?`<div class="card-desc">📏 ${d.size}</div>`:''}<div class="card-footer"><div><div class="card-price">${fmt(d.rental)}/rental</div><span class="badge ${d.status==='Available'?'badge-available':'badge-rented'}" style="margin-top:4px;">${d.status}</span></div><div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm" onclick="editDress('${d.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="deleteDress('${d.id}')">✕</button></div></div></div></div>`).join('');
+  document.getElementById('dresses-table').innerHTML=!f.length?'<tr><td colspan="7" style="text-align:center;color:var(--mid);padding:40px;">No dresses found</td></tr>':f.map(d=>`<tr><td>${d.photo?`<img src="${d.photo}" class="thumb-img">`:'<div class="thumb-ph">👗</div>'}</td><td><div class="dress-name">${d.name||'—'}</div>${d.colour?`<div class="desc-text">🎨 ${d.colour}</div>`:''}${d.size?`<div class="desc-text">📏 ${d.size}</div>`:''}</td><td><div style="font-size:13px;">${d.desc||'—'}</div></td><td>${fmt(d.cost)}</td><td style="color:var(--green);font-weight:600;">${fmt(d.rental)}</td><td><span class="badge ${d.status==='Available'?'badge-available':'badge-rented'}">${d.status}</span></td><td><div style="display:flex;gap:6px;"><button class="btn btn-outline btn-sm" onclick="editDress('${d.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="deleteDress('${d.id}')">✕</button></div></td></tr>`).join('');
+}
+
+function renderRentals(){
+  document.getElementById('r-count').textContent=data.rentals.length;
+  document.getElementById('r-active').textContent=data.rentals.filter(r=>!r.returned).length;
+  document.getElementById('r-returned').textContent=data.rentals.filter(r=>r.returned).length;
+  document.getElementById('r-earned').textContent=fmt(data.rentals.reduce((s,r)=>s+r.amount,0));
+  document.getElementById('rentals-table').innerHTML=!data.rentals.length?'<tr><td colspan="8" style="text-align:center;color:var(--mid);padding:40px;">No rentals yet — click "+ New Rental"</td></tr>':[...data.rentals].reverse().map(r=>`<tr><td><div style="font-family:\'Cormorant Garamond\',serif;font-size:15px;font-weight:600;">${r.dress}</div></td><td><div style="font-weight:500;">${r.client}</div>${r.phone?`<div style="font-size:12px;color:var(--mid);">📱 ${r.phone}</div>`:''}</td><td>${r.eventDate||'—'}</td><td>${r.returnDate||'—'}</td><td><div class="amount-positive">${fmt(r.amount)}</div>${r.deposit?`<div style="font-size:11px;color:var(--mid);">Dep: ${fmt(r.deposit)}</div>`:''}</td><td style="font-size:12px;">${r.location||'—'}</td><td><span class="badge ${r.returned?'badge-available':'badge-rented'}">${r.returned?'Returned':'Active'}</span></td><td><div style="display:flex;gap:6px;">${!r.returned?`<button class="btn btn-green btn-sm" onclick="markReturned('${r.id}')">✓ Returned</button>`:''}<button class="btn btn-danger btn-sm" onclick="deleteRental('${r.id}')">✕</button></div></td></tr>`).join('');
+}
+
+function renderIncome(){
+  document.getElementById('inc-total').textContent=fmt(data.income.reduce((s,i)=>s+i.amount,0));
+  document.getElementById('inc-rentals').textContent=fmt(data.income.filter(i=>i.cat==='Rental').reduce((s,i)=>s+i.amount,0));
+  document.getElementById('inc-sales').textContent=fmt(data.income.filter(i=>i.cat==='Sale').reduce((s,i)=>s+i.amount,0));
+  document.getElementById('inc-other').textContent=fmt(data.income.filter(i=>i.cat!=='Rental'&&i.cat!=='Sale').reduce((s,i)=>s+i.amount,0));
+  document.getElementById('income-table').innerHTML=!data.income.length?'<tr><td colspan="5" style="text-align:center;color:var(--mid);padding:40px;">No income recorded yet</td></tr>':[...data.income].reverse().map(i=>`<tr><td style="font-size:13px;">${i.date}</td><td>${i.desc}</td><td><span class="badge badge-income">${i.cat}</span></td><td class="amount-positive">${fmt(i.amount)}</td><td><button class="btn btn-danger btn-sm" onclick="deleteIncome('${i.id}')">✕</button></td></tr>`).join('');
+}
+
+function renderExpenses(){
+  document.getElementById('exp-total').textContent=fmt(data.expenses.reduce((s,e)=>s+e.amount,0));
+  document.getElementById('exp-dresses').textContent=fmt(data.expenses.filter(e=>e.cat==='Dresses').reduce((s,e)=>s+e.amount,0));
+  document.getElementById('exp-ops').textContent=fmt(data.expenses.filter(e=>e.cat==='Operations'||e.cat==='Alterations').reduce((s,e)=>s+e.amount,0));
+  document.getElementById('exp-mkt').textContent=fmt(data.expenses.filter(e=>e.cat==='Marketing').reduce((s,e)=>s+e.amount,0));
+  document.getElementById('expenses-table').innerHTML=[...data.expenses].reverse().map(e=>`<tr><td style="font-size:13px;">${e.date}</td><td>${e.desc}</td><td><span class="badge badge-expense">${e.cat}</span></td><td class="amount-negative">${fmt(e.amount)}</td><td><button class="btn btn-danger btn-sm" onclick="deleteExpense('${e.id}')">✕</button></td></tr>`).join('');
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+function openDressModal(id){
+  editingDressId=id||null;
+  const d=id?data.dresses.find(x=>x.id===id):null;
+  document.getElementById('dress-modal-title').textContent=d?'Edit Dress':'Add Dress';
+  document.getElementById('d-name').value=d?.name||'';
+  document.getElementById('d-desc').value=d?.desc||'';
+  document.getElementById('d-cost').value=d?.cost||'';
+  document.getElementById('d-rental').value=d?.rental||'';
+  document.getElementById('d-size').value=d?.size||'';
+  document.getElementById('d-colour').value=d?.colour||'';
+  document.getElementById('d-location').value=d?.location||'Klerksdorp';
+  document.getElementById('d-status').value=d?.status||'Available';
+  currentPhotoData=d?.photo||null;
+  const prev=document.getElementById('d-photo-preview');
+  if(currentPhotoData){prev.src=currentPhotoData;prev.style.display='block';document.getElementById('d-photo-placeholder').style.display='none';document.getElementById('d-photo-remove').style.display='inline-flex';}
+  else{prev.src='';prev.style.display='none';document.getElementById('d-photo-placeholder').style.display='block';document.getElementById('d-photo-remove').style.display='none';}
+  document.getElementById('d-photo-input').value='';
+  document.getElementById('dress-modal').classList.add('open');
+}
+function editDress(id){openDressModal(id);}
+
+async function saveDress(){
+  const btn=document.getElementById('save-dress-btn');btn.textContent='Saving…';btn.disabled=true;
+  const obj={id:editingDressId||uid(),name:document.getElementById('d-name').value.trim(),desc:document.getElementById('d-desc').value.trim(),cost:parseFloat(document.getElementById('d-cost').value)||0,rental:parseFloat(document.getElementById('d-rental').value)||0,size:document.getElementById('d-size').value.trim(),colour:document.getElementById('d-colour').value.trim(),location:document.getElementById('d-location').value,status:document.getElementById('d-status').value,photo:currentPhotoData||''};
+  if(editingDressId){data.dresses=data.dresses.map(d=>d.id===editingDressId?obj:d);}else{data.dresses.push(obj);}
+  await saveSheet('dresses');
+  btn.textContent='Save Dress';btn.disabled=false;
+  closeModal('dress-modal');render();toast('Dress saved to Google Sheets ✨','success');
+}
+async function deleteDress(id){if(!confirm('Delete this dress?'))return;data.dresses=data.dresses.filter(d=>d.id!==id);await saveSheet('dresses');render();toast('Dress deleted');}
+
+function openRentalModal(){
+  const sel=document.getElementById('r-dress');
+  sel.innerHTML='<option value="">Select dress…</option>'+data.dresses.filter(d=>d.status==='Available').map(d=>`<option value="${d.name||d.desc}">${d.name?d.name+' — ':''}${d.desc}</option>`).join('');
+  ['r-client','r-phone','r-notes'].forEach(id=>document.getElementById(id).value='');
+  ['r-event-date','r-return-date','r-amount','r-deposit'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('rental-modal').classList.add('open');
+}
+async function saveRental(){
+  const dress=document.getElementById('r-dress').value,client=document.getElementById('r-client').value.trim();
+  if(!dress||!client){alert('Please select a dress and enter a client name.');return;}
+  const r={id:uid(),dress,client,phone:document.getElementById('r-phone').value.trim(),eventDate:document.getElementById('r-event-date').value,returnDate:document.getElementById('r-return-date').value,amount:parseFloat(document.getElementById('r-amount').value)||0,deposit:parseFloat(document.getElementById('r-deposit').value)||0,location:document.getElementById('r-location').value,notes:document.getElementById('r-notes').value.trim(),returned:false};
+  data.rentals.push(r);
+  data.dresses=data.dresses.map(d=>(d.name===dress||d.desc===dress)?{...d,status:'Rented'}:d);
+  if(r.amount>0)data.income.push({id:uid(),date:r.eventDate||today(),desc:`Rental — ${dress} (${client})`,cat:'Rental',amount:r.amount});
+  await pushAll();closeModal('rental-modal');render();toast('Rental saved ✨','success');
+}
+async function markReturned(id){const r=data.rentals.find(x=>x.id===id);if(!r)return;r.returned=true;data.dresses=data.dresses.map(d=>(d.name===r.dress||d.desc===r.dress)?{...d,status:'Available'}:d);await pushAll();render();toast('Marked as returned ✓','success');}
+async function deleteRental(id){if(!confirm('Delete this rental?'))return;data.rentals=data.rentals.filter(r=>r.id!==id);await saveSheet('rentals');render();}
+
+function openIncomeModal(){document.getElementById('inc-date').value=today();document.getElementById('inc-desc').value='';document.getElementById('inc-amount').value='';document.getElementById('income-modal').classList.add('open');}
+async function saveIncome(){const amount=parseFloat(document.getElementById('inc-amount').value);if(!amount){alert('Please enter an amount.');return;}data.income.push({id:uid(),date:document.getElementById('inc-date').value,desc:document.getElementById('inc-desc').value.trim(),cat:document.getElementById('inc-cat').value,amount});await saveSheet('income');closeModal('income-modal');render();toast('Income saved ✨','success');}
+async function deleteIncome(id){if(!confirm('Delete?'))return;data.income=data.income.filter(i=>i.id!==id);await saveSheet('income');render();}
+
+function openExpenseModal(){document.getElementById('exp-date').value=today();document.getElementById('exp-desc').value='';document.getElementById('exp-amount').value='';document.getElementById('expense-modal').classList.add('open');}
+async function saveExpense(){const amount=parseFloat(document.getElementById('exp-amount').value);if(!amount){alert('Please enter an amount.');return;}data.expenses.push({id:uid(),date:document.getElementById('exp-date').value,desc:document.getElementById('exp-desc').value.trim(),cat:document.getElementById('exp-cat').value,amount});await saveSheet('expenses');closeModal('expense-modal');render();toast('Expense saved ✨','success');}
+async function deleteExpense(id){if(!confirm('Delete?'))return;data.expenses=data.expenses.filter(e=>e.id!==id);await saveSheet('expenses');render();}
+
+document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});});
+</script>
+</body>
+</html>
