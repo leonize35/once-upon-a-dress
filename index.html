@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Once Upon a Dress — Manager</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap');
+:root{
+  --gold:#C9A84C;--gp:#FBF7EE;--gl:#E8D5A3;
+  --pink:#D45380;--pkl:#F9EDF2;
+  --cream:#FDFAF5;--dark:#2C2C2C;--mid:#6B6B6B;--bdr:#E8E0D0;
+  --grn:#4CAF7D;--grnl:#EDF7F2;
+  --red:#E05252;--redl:#FDEAEA;
+  --blue:#5B8DD9;--bluel:#EDF2FB;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--dark);}
+header{background:var(--dark);height:56px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--gold);}
+.logo em{font-style:italic;color:#fff;}
+.hbar{display:flex;align-items:center;gap:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--grn);}
+.dot.busy{background:var(--gold);animation:pulse 1s infinite;}
+.dot.fail{background:var(--red);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.slbl{font-size:11px;color:rgba(255,255,255,.7);cursor:pointer;}
+.hbtn{font-family:'Inter',sans-serif;font-size:12px;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:5px 12px;border-radius:6px;cursor:pointer;}
+nav{background:#fff;border-bottom:1px solid var(--bdr);display:flex;overflow-x:auto;padding:0 16px;}
+nav button{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mid);background:none;border:none;border-bottom:2px solid transparent;padding:12px 14px;cursor:pointer;white-space:nowrap;transition:all .15s;}
+nav button.on{color:var(--gold);border-bottom-color:var(--gold);}
+main{padding:20px;max-width:1200px;margin:0 auto;}
+.sec{display:none;}.sec.on{display:block;}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:18px;}
+.sc{background:#fff;border:1px solid var(--bdr);border-radius:10px;padding:14px 16px;}
+.sc .lb{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--mid);margin-bottom:4px;}
+.sc .vl{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;line-height:1.1;}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.st{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;}
+.btn{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;padding:7px 14px;border-radius:7px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s;}
+.bg{background:var(--gold);color:#fff;}.bg:hover{background:#b8943d;}
+.bo{background:#fff;color:var(--dark);border:1px solid var(--bdr);}.bo:hover{border-color:var(--gold);color:var(--gold);}
+.bsm{font-size:11px;padding:4px 9px;border-radius:5px;}
+.bd{background:var(--redl);color:var(--red);}.bd:hover{background:var(--red);color:#fff;}
+.bgr{background:var(--grn);color:#fff;}
+.vt{display:flex;gap:4px;}
+.vb{font-family:'Inter',sans-serif;font-size:11px;padding:5px 10px;border-radius:5px;border:1px solid var(--bdr);background:#fff;color:var(--mid);cursor:pointer;}
+.vb.on{background:var(--gold);color:#fff;border-color:var(--gold);}
+/* FILTERS BAR */
+.fbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.ftag{font-family:'Inter',sans-serif;font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid var(--bdr);background:#fff;color:var(--mid);cursor:pointer;white-space:nowrap;transition:all .15s;}
+.ftag:hover{border-color:var(--gold);color:var(--gold);}
+.ftag.on{background:var(--gold);color:#fff;border-color:var(--gold);}
+/* CARDS */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;}
+.dc{background:#fff;border:1px solid var(--bdr);border-radius:12px;overflow:hidden;transition:transform .15s,box-shadow .15s;}
+.dc:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.07);}
+.di{width:100%;aspect-ratio:3/4;background:var(--gp);display:flex;align-items:center;justify-content:center;font-size:38px;overflow:hidden;position:relative;}
+.di img{width:100%;height:100%;object-fit:cover;}
+.di .dpct{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.5));padding:8px;text-align:center;}
+.di .dpct .pbar{height:4px;background:rgba(255,255,255,.3);border-radius:2px;overflow:hidden;margin-top:4px;}
+.di .dpct .pfill{height:100%;background:var(--gold);border-radius:2px;}
+.di .dpct .plab{font-size:10px;color:#fff;font-weight:600;}
+.db{padding:10px 12px;}
+.dn{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;margin-bottom:2px;}
+.dd{font-size:11px;color:var(--mid);margin-bottom:4px;line-height:1.4;}
+.dp{font-size:13px;font-weight:600;color:var(--grn);}
+.dmet{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 8px;}
+.dtag{font-size:10px;padding:2px 6px;border-radius:10px;background:var(--gp);color:var(--mid);border:1px solid var(--bdr);}
+.dft{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--bdr);}
+/* EARNED BAR */
+.earnbar{margin:4px 0 6px;}
+.earnlbl{font-size:10px;color:var(--mid);margin-bottom:2px;}
+.ebar{height:5px;background:var(--bdr);border-radius:3px;overflow:hidden;}
+.efill{height:100%;background:var(--grn);border-radius:3px;transition:width .3s;}
+.efill.full{background:var(--gold);}
+/* TABLE */
+.tw{background:#fff;border:1px solid var(--bdr);border-radius:10px;overflow:hidden;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:600px;}
+thead{background:var(--gp);}
+th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mid);padding:10px 12px;text-align:left;white-space:nowrap;}
+td{padding:9px 12px;font-size:13px;border-top:1px solid var(--bdr);vertical-align:middle;}
+tr:hover td{background:var(--gp);}
+.tn{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;}
+.tim{width:42px;height:52px;object-fit:cover;border-radius:5px;border:1px solid var(--bdr);}
+.tph{width:42px;height:52px;background:var(--gp);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.bx{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;}
+.ba{background:var(--grnl);color:var(--grn);}
+.br{background:var(--pkl);color:var(--pink);}
+.bbl{background:var(--bluel);color:var(--blue);}
+.bor{background:#FFF3E0;color:#E65100;}
+.sb{background:var(--gp);border:1px solid var(--gl);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;gap:18px;flex-wrap:wrap;}
+.sl{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--mid);margin-bottom:2px;}
+.sv{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;}
+.sr{position:relative;margin-bottom:12px;}
+.sr input{width:100%;padding:8px 12px 8px 32px;font-family:'Inter',sans-serif;font-size:13px;border:1px solid var(--bdr);border-radius:8px;background:#fff;outline:none;}
+.sr input:focus{border-color:var(--gold);}
+.si{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--mid);}
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:16px;overflow-y:auto;}
+.mo.on{display:flex;}
+.md{background:#fff;border-radius:14px;padding:24px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;margin:auto;}
+.mt{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:18px;}
+.fg{margin-bottom:12px;}
+.fg label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mid);margin-bottom:4px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:8px 12px;font-family:'Inter',sans-serif;font-size:13px;border:1px solid var(--bdr);border-radius:6px;background:var(--cream);outline:none;transition:border-color .15s;}
+.fg input:focus,.fg select:focus{border-color:var(--gold);}
+/* MULTI-SELECT CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:5px;}
+.chip{font-family:'Inter',sans-serif;font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--bdr);background:#fff;color:var(--mid);cursor:pointer;transition:all .15s;user-select:none;}
+.chip:hover{border-color:var(--gold);}
+.chip.on{background:var(--gold);color:#fff;border-color:var(--gold);}
+.ma{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
+.pu{border:2px dashed var(--bdr);border-radius:8px;padding:14px;text-align:center;cursor:pointer;transition:border-color .15s;background:var(--cream);}
+.pu:hover{border-color:var(--gold);}
+.pp{width:100%;max-height:180px;object-fit:cover;border-radius:6px;margin-top:8px;display:none;}
+.ib{background:var(--bluel);border:1px solid #c0d4f5;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--blue);margin-bottom:12px;}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.ch{text-align:center;font-size:10px;font-weight:600;color:var(--mid);padding:6px 2px;}
+.cd{min-height:52px;background:#fff;border:1px solid var(--bdr);border-radius:6px;padding:3px;}
+.cd.tod{border-color:var(--gold);background:var(--gp);}
+.cd.hev{border-color:var(--pink);}
+.cd.blk{background:var(--redl);border-color:var(--red);}
+.cn{font-size:11px;font-weight:600;color:var(--mid);}
+.ce{font-size:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px;}
+.cnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.ct{font-family:'Cormorant Garamond',serif;font-size:18px;}
+.ap{color:var(--grn);font-weight:600;}
+.an{color:var(--red);font-weight:600;}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--dark);color:#fff;padding:10px 16px;border-radius:8px;font-size:12px;z-index:999;opacity:0;transform:translateY(6px);transition:all .2s;pointer-events:none;}
+.toast.on{opacity:1;transform:none;}
+.toast.ok{background:var(--grn);}
+.toast.er{background:var(--red);}
+.phnote{font-size:11px;color:var(--mid);background:var(--gp);border:1px solid var(--gl);border-radius:6px;padding:6px 10px;margin-top:6px;}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Once Upon a <em>Dress</em></div>
+  <div class="hbar">
+    <span class="dot" id="dot"></span>
+    <span class="slbl" id="slbl">Ready</span>
+    <button class="hbtn" onclick="syncNow()">🔄 Sync</button>
+  </div>
+</header>
+<nav>
+  <button class="on" onclick="go('dash',this)">📊 Dashboard</button>
+  <button onclick="go('dresses',this)">👗 Dresses</button>
+  <button onclick="go('rentals',this)">📅 Rentals</button>
+  <button onclick="go('fittings',this)">📌 Fittings</button>
+  <button onclick="go('cal',this)">🗓 Calendar</button>
+  <button onclick="go('income',this)">💰 Income</button>
+  <button onclick="go('expenses',this)">🧾 Expenses</button>
+</nav>
+<main>
+<!-- DASHBOARD -->
+<div id="dash" class="sec on">
+  <div class="sh" style="margin-bottom:18px"><h1 class="st">Good day ✨</h1><button class="btn bo" onclick="syncNow()">🔄 Sync now</button></div>
+  <div class="sg">
+    <div class="sc" style="border-top:3px solid var(--gold)"><div class="lb">Dresses</div><div class="vl" id="s-dr">0</div></div>
+    <div class="sc" style="border-top:3px solid var(--pink)"><div class="lb">Rented Out</div><div class="vl" id="s-re">0</div></div>
+    <div class="sc" style="border-top:3px solid var(--blue)"><div class="lb">Fittings Pending</div><div class="vl" id="s-fi">0</div></div>
+    <div class="sc" style="border-top:3px solid var(--grn)"><div class="lb">Total Income</div><div class="vl" id="s-in">R0</div></div>
+    <div class="sc" style="border-top:3px solid var(--red)"><div class="lb">Total Expenses</div><div class="vl" id="s-ex">R0</div></div>
+    <div class="sc" style="border-top:3px solid var(--blue)"><div class="lb">Net Profit</div><div class="vl" id="s-pr">R0</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+    <div class="sc" style="border-top:3px solid var(--grn)"><div class="lb">Leo's Investment</div><div class="vl" style="font-size:20px">R20 000</div></div>
+    <div class="sc" style="border-top:3px solid var(--gold)"><div class="lb">Collection Cost</div><div class="vl" style="font-size:20px">R13 650</div></div>
+  </div>
+  <div class="tw"><table><thead><tr><th>Dress</th><th>Client</th><th>Event Date</th><th>Amount</th><th>Payment</th><th>Status</th></tr></thead>
+  <tbody id="d-rt"></tbody></table></div>
+</div>
+
+<!-- DRESSES -->
+<div id="dresses" class="sec">
+  <div class="sh">
+    <h2 class="st">Dress Collection</h2>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <div class="vt">
+        <button class="vb on" id="vc" onclick="setV('card')">⊞ Cards</button>
+        <button class="vb" id="vt2" onclick="setV('table')">☰ Table</button>
+      </div>
+      <button class="btn bg" onclick="openDM()">+ Add Dress</button>
+    </div>
+  </div>
+  <div class="sb">
+    <div><div class="sl">Total</div><div class="sv" id="d-tot">0</div></div>
+    <div><div class="sl">Available</div><div class="sv" id="d-av" style="color:var(--grn)">0</div></div>
+    <div><div class="sl">Rented</div><div class="sv" id="d-rn" style="color:var(--pink)">0</div></div>
+    <div><div class="sl">Value</div><div class="sv" id="d-vl">R0</div></div>
+    <div><div class="sl">Total Earned</div><div class="sv" id="d-ea" style="color:var(--grn)">R0</div></div>
+  </div>
+  <!-- FILTERS -->
+  <div style="margin-bottom:8px;font-size:11px;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:.06em">Filter by Style</div>
+  <div class="fbar" id="style-filters">
+    <button class="ftag on" onclick="setFilt('style','all',this)">All</button>
+    <button class="ftag" onclick="setFilt('style','Off Shoulder',this)">Off Shoulder</button>
+    <button class="ftag" onclick="setFilt('style','One Shoulder',this)">One Shoulder</button>
+    <button class="ftag" onclick="setFilt('style','Straps',this)">Straps</button>
+    <button class="ftag" onclick="setFilt('style','Strapless',this)">Strapless</button>
+    <button class="ftag" onclick="setFilt('style','Cocktail',this)">Cocktail</button>
+    <button class="ftag" onclick="setFilt('style','Ballgown',this)">Ballgown</button>
+    <button class="ftag" onclick="setFilt('style','Sparkle',this)">Sparkle</button>
+    <button class="ftag" onclick="setFilt('style','Plain',this)">Plain</button>
+    <button class="ftag" onclick="setFilt('style','With Slit',this)">With Slit</button>
+  </div>
+  <div style="margin-bottom:8px;margin-top:8px;font-size:11px;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:.06em">Filter by Colour</div>
+  <div class="fbar" id="colour-filters">
+    <button class="ftag on" onclick="setFilt('colour','all',this)">All</button>
+    <button class="ftag" onclick="setFilt('colour','Pink',this)">🩷 Pink</button>
+    <button class="ftag" onclick="setFilt('colour','Black',this)">🖤 Black</button>
+    <button class="ftag" onclick="setFilt('colour','Blue',this)">💙 Blue</button>
+    <button class="ftag" onclick="setFilt('colour','Green',this)">💚 Green</button>
+    <button class="ftag" onclick="setFilt('colour','Red',this)">❤️ Red</button>
+    <button class="ftag" onclick="setFilt('colour','Maroon',this)">🍷 Maroon</button>
+    <button class="ftag" onclick="setFilt('colour','Yellow',this)">💛 Yellow</button>
+    <button class="ftag" onclick="setFilt('colour','Orange',this)">🧡 Orange</button>
+    <button class="ftag" onclick="setFilt('colour','White',this)">🤍 White</button>
+    <button class="ftag" onclick="setFilt('colour','Gold',this)">✨ Gold</button>
+    <button class="ftag" onclick="setFilt('colour','Purple',this)">💜 Purple</button>
+  </div>
+  <div class="sr"><span class="si">🔍</span><input type="text" placeholder="Search by name or description…" oninput="fltD(this.value)"></div>
+  <div class="cg" id="d-cards"></div>
+  <div class="tw" id="d-tw" style="display:none">
+    <table><thead><tr><th>Photo</th><th>Name</th><th>Description</th><th>Colour</th><th>Size</th><th>Cost</th><th>Rental</th><th>Earned</th><th>Paid Off?</th><th>Status</th><th></th></tr></thead>
+    <tbody id="d-tbl"></tbody></table>
+  </div>
+</div>
+
+<!-- RENTALS -->
+<div id="rentals" class="sec">
+  <div class="sh"><h2 class="st">Rentals</h2><button class="btn bg" onclick="openRM()">+ New Rental</button></div>
+  <div class="sb">
+    <div><div class="sl">Total</div><div class="sv" id="r-tot">0</div></div>
+    <div><div class="sl">Active</div><div class="sv" id="r-act" style="color:var(--pink)">0</div></div>
+    <div><div class="sl">Returned</div><div class="sv" id="r-ret" style="color:var(--grn)">0</div></div>
+    <div><div class="sl">Earned</div><div class="sv" id="r-ern">R0</div></div>
+    <div><div class="sl">Outstanding</div><div class="sv" id="r-out" style="color:var(--red)">R0</div></div>
+  </div>
+  <div class="tw"><table><thead><tr><th>Dress</th><th>Client</th><th>Event Date</th><th>Return</th><th>Amount</th><th>Deposit</th><th>Balance</th><th>Payment</th><th>Status</th><th></th></tr></thead>
+  <tbody id="r-tbl"></tbody></table></div>
+</div>
+
+<!-- FITTINGS -->
+<div id="fittings" class="sec">
+  <div class="sh"><h2 class="st">Fittings</h2></div>
+  <div class="ib">📌 Clients book fittings via your gallery page Google Form. Tap <strong>Sync</strong> to load latest submissions.</div>
+  <div class="sb">
+    <div><div class="sl">Total</div><div class="sv" id="f-tot">0</div></div>
+    <div><div class="sl">Pending</div><div class="sv" id="f-pen" style="color:#E65100">0</div></div>
+    <div><div class="sl">Confirmed</div><div class="sv" id="f-con" style="color:var(--grn)">0</div></div>
+    <div><div class="sl">Completed</div><div class="sv" id="f-com" style="color:var(--mid)">0</div></div>
+  </div>
+  <div class="tw"><table><thead><tr><th>Client</th><th>WhatsApp</th><th>Date</th><th>Dress Interest</th><th>Location</th><th>Status</th><th></th></tr></thead>
+  <tbody id="f-tbl"></tbody></table></div>
+</div>
+
+<!-- CALENDAR -->
+<div id="cal" class="sec">
+  <div class="sh"><h2 class="st">Calendar</h2><button class="btn bd" onclick="openBM()">🚫 Block Dates</button></div>
+  <div class="ib">🩷 Pink = rentals &nbsp;🔵 Blue = fittings &nbsp;🔴 Red = unavailable</div>
+  <div class="cnav">
+    <button class="btn bo bsm" onclick="chM(-1)">← Prev</button>
+    <div class="ct" id="cal-t"></div>
+    <button class="btn bo bsm" onclick="chM(1)">Next →</button>
+  </div>
+  <div class="cal-g" id="cal-h" style="margin-bottom:3px"></div>
+  <div class="cal-g" id="cal-d"></div>
+</div>
+
+<!-- INCOME -->
+<div id="income" class="sec">
+  <div class="sh"><h2 class="st">Income</h2><button class="btn bg" onclick="openIM()">+ Add</button></div>
+  <div class="sb">
+    <div><div class="sl">Total</div><div class="sv" id="i-tot" style="color:var(--grn)">R0</div></div>
+    <div><div class="sl">Rentals</div><div class="sv" id="i-ren">R0</div></div>
+    <div><div class="sl">Sales</div><div class="sv" id="i-sal">R0</div></div>
+    <div><div class="sl">Other</div><div class="sv" id="i-oth">R0</div></div>
+  </div>
+  <div class="tw"><table><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr></thead>
+  <tbody id="i-tbl"></tbody></table></div>
+</div>
+
+<!-- EXPENSES -->
+<div id="expenses" class="sec">
+  <div class="sh"><h2 class="st">Expenses</h2><button class="btn bg" onclick="openEM()">+ Add</button></div>
+  <div class="sb">
+    <div><div class="sl">Total</div><div class="sv" id="e-tot" style="color:var(--red)">R0</div></div>
+    <div><div class="sl">Dresses</div><div class="sv" id="e-dr">R0</div></div>
+    <div><div class="sl">Operations</div><div class="sv" id="e-op">R0</div></div>
+    <div><div class="sl">Marketing</div><div class="sv" id="e-mk">R0</div></div>
+  </div>
+  <div class="tw"><table><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr></thead>
+  <tbody id="e-tbl"></tbody></table></div>
+</div>
+</main>
+
+<!-- DRESS MODAL -->
+<div class="mo" id="dm">
+  <div class="md">
+    <div class="mt" id="dm-t">Add Dress</div>
+    <div class="fg"><label>Dress Name</label><input type="text" id="d-na" placeholder="e.g. Rose"></div>
+    <div class="fg"><label>Description</label><input type="text" id="d-de" placeholder="e.g. Pienk styf blinkers"></div>
+    <div class="fg"><label>Cost Price (R)</label><input type="number" id="d-co" placeholder="800"></div>
+    <div class="fg"><label>Rental Price (R)</label><input type="number" id="d-re" placeholder="350"></div>
+    <div class="fg"><label>Colour (choose all that apply)</label>
+      <div class="chips" id="c-colour">
+        <span class="chip" data-v="Pink">🩷 Pink</span>
+        <span class="chip" data-v="Baby Pink">🩷 Baby Pink</span>
+        <span class="chip" data-v="Hot Pink">🩷 Hot Pink</span>
+        <span class="chip" data-v="Red">❤️ Red</span>
+        <span class="chip" data-v="Maroon">🍷 Maroon</span>
+        <span class="chip" data-v="Orange">🧡 Orange</span>
+        <span class="chip" data-v="Yellow">💛 Yellow</span>
+        <span class="chip" data-v="Gold">✨ Gold</span>
+        <span class="chip" data-v="Green">💚 Green</span>
+        <span class="chip" data-v="Teal">💚 Teal</span>
+        <span class="chip" data-v="Turquoise">💙 Turquoise</span>
+        <span class="chip" data-v="Light Blue">💙 Light Blue</span>
+        <span class="chip" data-v="Dark Blue">💙 Dark Blue</span>
+        <span class="chip" data-v="Navy">💙 Navy</span>
+        <span class="chip" data-v="Purple">💜 Purple</span>
+        <span class="chip" data-v="Lavender">💜 Lavender</span>
+        <span class="chip" data-v="Black">🖤 Black</span>
+        <span class="chip" data-v="White">🤍 White</span>
+        <span class="chip" data-v="Cream">🤍 Cream</span>
+        <span class="chip" data-v="Nude">🤍 Nude</span>
+        <span class="chip" data-v="Glitter">✨ Glitter</span>
+        <span class="chip" data-v="Multi">🌈 Multi</span>
+      </div>
+    </div>
+    <div class="fg"><label>Style (choose all that apply)</label>
+      <div class="chips" id="c-style">
+        <span class="chip" data-v="Off Shoulder">Off Shoulder</span>
+        <span class="chip" data-v="One Shoulder">One Shoulder</span>
+        <span class="chip" data-v="Straps">Straps</span>
+        <span class="chip" data-v="Strapless">Strapless</span>
+        <span class="chip" data-v="Cocktail">Cocktail</span>
+        <span class="chip" data-v="Ballgown">Ballgown</span>
+        <span class="chip" data-v="Mermaid">Mermaid</span>
+        <span class="chip" data-v="With Slit">With Slit</span>
+        <span class="chip" data-v="Without Slit">Without Slit</span>
+        <span class="chip" data-v="Sparkle">Sparkle</span>
+        <span class="chip" data-v="Plain">Plain</span>
+        <span class="chip" data-v="Flowy">Flowy</span>
+        <span class="chip" data-v="Fitted">Fitted</span>
+        <span class="chip" data-v="Short">Short</span>
+        <span class="chip" data-v="Long">Long</span>
+      </div>
+    </div>
+    <div class="fg"><label>Size</label>
+      <div class="chips" id="c-size">
+        <span class="chip" data-v="Small">Small</span>
+        <span class="chip" data-v="Small-Medium">Small-Medium</span>
+        <span class="chip" data-v="Medium">Medium</span>
+        <span class="chip" data-v="Medium-Large">Medium-Large</span>
+        <span class="chip" data-v="Large">Large</span>
+        <span class="chip" data-v="Extra Large">Extra Large</span>
+      </div>
+    </div>
+    <div class="fg"><label>Occasion (choose all that apply)</label>
+      <div class="chips" id="c-occ">
+        <span class="chip" data-v="Wedding">Wedding</span>
+        <span class="chip" data-v="Matric Farewell">Matric Farewell</span>
+        <span class="chip" data-v="Formal">Formal</span>
+        <span class="chip" data-v="Birthday">Birthday</span>
+        <span class="chip" data-v="Photoshoot">Photoshoot</span>
+        <span class="chip" data-v="Baby Shower">Baby Shower</span>
+        <span class="chip" data-v="General">General</span>
+      </div>
+    </div>
+    <div class="fg"><label>Location</label>
+      <select id="d-lo"><option value="Klerksdorp">Klerksdorp</option><option value="Potchefstroom">Potchefstroom</option><option value="Both">Both</option></select>
+    </div>
+    <div class="fg"><label>Status</label>
+      <select id="d-st"><option value="Available">Available</option><option value="Rented">Rented</option><option value="In Alterations">In Alterations</option><option value="For Sale">For Sale</option></select>
+    </div>
+    <div class="fg"><label>Photo</label>
+      <div class="pu" onclick="document.getElementById('ph-in').click()">
+        <input type="file" id="ph-in" accept="image/*" onchange="prevPh(event)" style="display:none">
+        <span id="ph-lbl">📷 Tap to upload photo</span>
+        <img id="ph-pr" class="pp">
+      </div>
+      <div class="phnote">📌 Photos upload to Google Drive so Cecelia sees them too. Takes 3–5 seconds on save.</div>
+      <div id="ph-status" style="font-size:11px;margin-top:6px;min-height:16px"></div>
+      <button type="button" class="btn bo bsm" id="ph-rm" onclick="rmPh()" style="margin-top:6px;display:none">Remove photo</button>
+    </div>
+    <div class="ma">
+      <button class="btn bo" onclick="closeM('dm')">Cancel</button>
+      <button class="btn bg" id="dm-save" onclick="saveDress()">Save Dress</button>
+    </div>
+  </div>
+</div>
+
+<!-- RENTAL MODAL -->
+<div class="mo" id="rm">
+  <div class="md">
+    <div class="mt">New Rental</div>
+    <div class="fg"><label>Choose Dress</label>
+      <select id="r-dr"></select>
+    </div>
+    <div class="fg"><label>Client Name</label><input type="text" id="r-cl"></div>
+    <div class="fg"><label>Client WhatsApp</label><input type="text" id="r-ph" placeholder="083 123 4567"></div>
+    <div class="fg"><label>Event Date</label><input type="date" id="r-ed"></div>
+    <div class="fg"><label>Return Date</label><input type="date" id="r-rd"></div>
+    <div class="fg"><label>Rental Amount (R)</label><input type="number" id="r-am" oninput="calcBal()"></div>
+    <div class="fg"><label>Deposit Paid (R)</label><input type="number" id="r-dp" oninput="calcBal()"></div>
+    <div class="fg"><label>Balance Due (R)</label><input type="number" id="r-bl" readonly style="background:#f0f0f0"></div>
+    <div class="fg"><label>Payment Status</label>
+      <select id="r-py"><option value="Unpaid">Unpaid</option><option value="Deposit Paid">Deposit Paid</option><option value="Fully Paid">Fully Paid</option></select>
+    </div>
+    <div class="fg"><label>Location</label>
+      <select id="r-lo"><option value="Klerksdorp">Klerksdorp</option><option value="Potchefstroom">Potchefstroom</option></select>
+    </div>
+    <div class="fg"><label>Notes</label><textarea id="r-no" rows="2"></textarea></div>
+    <div class="ma">
+      <button class="btn bo" onclick="closeM('rm')">Cancel</button>
+      <button class="btn bg" onclick="saveRental()">Confirm Rental ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCK MODAL -->
+<div class="mo" id="bm">
+  <div class="md">
+    <div class="mt">Block Dates</div>
+    <div class="fg"><label>From</label><input type="date" id="b-fr"></div>
+    <div class="fg"><label>To</label><input type="date" id="b-to"></div>
+    <div class="fg"><label>Reason</label><input type="text" id="b-re" placeholder="e.g. Holiday"></div>
+    <div class="ma">
+      <button class="btn bo" onclick="closeM('bm')">Cancel</button>
+      <button class="btn bd" onclick="saveBlock()">Block</button>
+    </div>
+  </div>
+</div>
+
+<!-- INCOME MODAL -->
+<div class="mo" id="im">
+  <div class="md">
+    <div class="mt">Add Income</div>
+    <div class="fg"><label>Date</label><input type="date" id="i-dt"></div>
+    <div class="fg"><label>Description</label><input type="text" id="i-de"></div>
+    <div class="fg"><label>Category</label>
+      <select id="i-ca"><option>Rental</option><option>Sale</option><option>Deposit</option><option>Alteration fee</option><option>Other</option></select>
+    </div>
+    <div class="fg"><label>Amount (R)</label><input type="number" id="i-am"></div>
+    <div class="ma"><button class="btn bo" onclick="closeM('im')">Cancel</button><button class="btn bg" onclick="saveInc()">Save</button></div>
+  </div>
+</div>
+
+<!-- EXPENSE MODAL -->
+<div class="mo" id="em">
+  <div class="md">
+    <div class="mt">Add Expense</div>
+    <div class="fg"><label>Date</label><input type="date" id="e-dt"></div>
+    <div class="fg"><label>Description</label><input type="text" id="e-de"></div>
+    <div class="fg"><label>Category</label>
+      <select id="e-ca"><option>Dresses</option><option>Operations</option><option>Marketing</option><option>Alterations</option><option>Transport</option><option>Other</option></select>
+    </div>
+    <div class="fg"><label>Amount (R)</label><input type="number" id="e-am"></div>
+    <div class="ma"><button class="btn bo" onclick="closeM('em')">Cancel</button><button class="btn bg" onclick="saveExp()">Save</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const GAS = 'https://script.google.com/macros/s/AKfycbwb4JaevZaqa6sMaai8HNcMqd1puIYGumKxIspxwc8TVtpzo55JLi9OI_0g0mQ8EqXTdg/exec';
+
+// Photos: Drive URL is synced, local base64 is a fast preview fallback
+const PK = 'oud_ph';
+let photos = {};
+try { photos = JSON.parse(localStorage.getItem(PK)||'{}'); } catch(e){}
+const svPh  = () => { try{localStorage.setItem(PK,JSON.stringify(photos));}catch(e){} };
+const gPhL  = id => photos[id]||null;           // local base64
+const sPhL  = (id,d) => { photos[id]=d; svPh(); };
+const rPhL  = id => { delete photos[id]; svPh(); };
+// Get best available photo: Drive URL first, local fallback
+const gPh   = d => d.driveUrl || gPhL(d.id) || null;
+
+// State
+let D = { dresses:[], rentals:[], fittings:[], income:[], expenses:[], blocks:[] };
+let dFilter='', dStyleFilt='all', dColourFilt='all';
+let dView='card', calY=new Date().getFullYear(), calM=new Date().getMonth();
+
+const uid  = () => 'd' + Date.now().toString(36).slice(-6) + Math.random().toString(36).slice(2,6);
+const fmt  = n  => 'R' + Number(n||0).toLocaleString('en-ZA');
+const today= ()  => new Date().toISOString().split('T')[0];
+const earned = d => {
+  const key = (d.name||d.desc||'').toLowerCase();
+  return D.rentals.filter(r=>(r.dress||'').toLowerCase()===key).reduce((s,r)=>s+(r.amount||0),0);
+};
+
+function toast(m,t=''){
+  const el=document.getElementById('toast');
+  el.textContent=m; el.className='toast on'+(t?' '+t:'');
+  setTimeout(()=>el.className='toast',3500);
+}
+function setSS(s){
+  const d=document.getElementById('dot'),l=document.getElementById('slbl');
+  if(s==='busy'){d.className='dot busy';l.textContent='Syncing…';}
+  else if(s==='ok'){d.className='dot';l.textContent='Synced ✓';}
+  else if(s==='err'){d.className='dot fail';l.textContent='Sync failed';}
+  else{d.className='dot';l.textContent='Ready';}
+}
+
+// ── SYNC ──────────────────────────────────────────────────────
+async function readSheets(){
+  const res = await fetch(GAS+'?action=read',{cache:'no-cache'});
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  const j = await res.json();
+  if(j.error) throw new Error(j.error);
+
+  if(j.dresses&&j.dresses.length) D.dresses = j.dresses.map(r=>({
+    id:      r.id||uid(),
+    name:    r.Name||'',
+    desc:    r.Description||r.Desc||'',
+    cost:    parseFloat(r['Cost Price (R)']||r.Cost)||0,
+    rental:  parseFloat(r['Rental Price (R)']||r.Rental)||0,
+    colour:  r.Colour||'',
+    style:   r.Style||'',
+    size:    r.Size||'',
+    occ:     r.Occasion||r.Occ||'',
+    loc:     r.Location||'',
+    status:  r.Status||'Available',
+    driveUrl:r.PhotoUrl||'',
+  }));
+  if(j.rentals&&j.rentals.length) D.rentals = j.rentals.map(r=>({
+    id:         r.id||uid(),
+    date:       r.Date||'',
+    dress:      r['Dress Name']||r.Dress||'',
+    client:     r['Client Name']||r.Client||'',
+    phone:      r.WhatsApp||r.Phone||'',
+    eventDate:  r['Event Date']||r.EventDate||'',
+    returnDate: r['Return Date']||r.ReturnDate||'',
+    amount:     parseFloat(r['Rental Amount (R)']||r.Amount)||0,
+    deposit:    parseFloat(r['Deposit Paid (R)']||r.Deposit)||0,
+    payment:    r['Payment Status']||r.Payment||'Unpaid',
+    loc:        r.Location||'',
+    notes:      r.Notes||'',
+    returned:   r['Returned?']==='Yes'||r.Returned==='Yes',
+  }));
+  if(j.fittings&&j.fittings.length) D.fittings = j.fittings.map(r=>({
+    id:r.id||uid(),
+    client:r['Client Name']||r.Client||r.Name||'',
+    phone:r.WhatsApp||r.Phone||'',
+    date:r.Date||'',
+    dress:r['Dress Interested In']||r.Dress||'',
+    loc:r.Location||'',
+    notes:r.Notes||'',
+    status:r.Status||'Pending',
+  }));
+  if(j.income&&j.income.length) D.income = j.income.map(r=>({
+    id:r.id||uid(),date:r.Date||'',
+    desc:r.Description||r.Desc||'',
+    cat:r.Category||r.Cat||'',
+    amount:parseFloat(r['Amount (R)']||r.Amount)||0,
+  }));
+  if(j.expenses&&j.expenses.length) D.expenses = j.expenses.map(r=>({
+    id:r.id||uid(),date:r.Date||'',
+    desc:r.Description||r.Desc||'',
+    cat:r.Category||r.Cat||'',
+    amount:parseFloat(r['Amount (R)']||r.Amount)||0,
+  }));
+  if(j.blocks&&j.blocks.length) D.blocks = j.blocks.map(r=>({
+    id:r.id||uid(),from:r.From||'',to:r.To||'',reason:r.Reason||'',
+  }));
+}
+
+function writeSheets(){
+  const p = {
+    action:'write',
+    dresses: D.dresses.map(d=>({
+      id:d.id,
+      'Name':d.name,'Description':d.desc,
+      'Colour':d.colour,'Style':d.style,'Size':d.size,
+      'Location':d.loc,'Cost Price (R)':d.cost,
+      'Rental Price (R)':d.rental,'Occasion':d.occ,'Status':d.status,
+      'PhotoUrl':d.driveUrl||'',
+    })),
+    rentals: D.rentals.map(r=>({
+      id:r.id,'Date':r.date,'Dress Name':r.dress,
+      'Client Name':r.client,'WhatsApp':r.phone,
+      'Event Date':r.eventDate,'Return Date':r.returnDate,
+      'Rental Amount (R)':r.amount,'Deposit Paid (R)':r.deposit,
+      'Balance Due (R)':(r.amount||0)-(r.deposit||0),
+      'Payment Status':r.payment,'Location':r.loc,
+      'Notes':r.notes,'Returned?':r.returned?'Yes':'No',
+    })),
+    income:   D.income.map(i=>({id:i.id,'Date':i.date,'Description':i.desc,'Category':i.cat,'Amount (R)':i.amount})),
+    expenses: D.expenses.map(e=>({id:e.id,'Date':e.date,'Description':e.desc,'Category':e.cat,'Amount (R)':e.amount})),
+    blocks:   D.blocks.map(b=>({id:b.id,'From':b.from,'To':b.to,'Reason':b.reason})),
+  };
+  // Hidden form POST — bypasses CORS
+  const json=JSON.stringify(p);
+  let frm=document.getElementById('_gf');
+  if(!frm){frm=document.createElement('form');frm.id='_gf';frm.method='POST';frm.target='_gi';frm.style.display='none';document.body.appendChild(frm);}
+  frm.action=GAS;
+  frm.innerHTML='<input name="payload" value="">';
+  frm.querySelector('input').value=json;
+  let ifr=document.getElementById('_gi');
+  if(!ifr){ifr=document.createElement('iframe');ifr.id='_gi';ifr.name='_gi';ifr.style.display='none';document.body.appendChild(ifr);}
+  frm.submit();
+}
+
+async function syncNow(){
+  setSS('busy');
+  try{
+    writeSheets();
+    await new Promise(r=>setTimeout(r,2000));
+    await readSheets();
+    render(); setSS('ok');
+    toast('Synced ✨','ok');
+  }catch(e){
+    setSS('err');
+    toast('Sync failed: '+e.message,'er');
+  }
+}
+
+// ── NAV & FILTERS ─────────────────────────────────────────────
+function go(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if(btn)btn.classList.add('on');
+  if(id==='cal')renderCal(); else render();
+}
+function setV(v){
+  dView=v;
+  document.getElementById('vc').classList.toggle('on',v==='card');
+  document.getElementById('vt2').classList.toggle('on',v==='table');
+  document.getElementById('d-cards').style.display=v==='card'?'grid':'none';
+  document.getElementById('d-tw').style.display=v==='table'?'block':'none';
+}
+function setFilt(type,val,btn){
+  if(type==='style'){
+    dStyleFilt=val;
+    document.querySelectorAll('#style-filters .ftag').forEach(b=>b.classList.remove('on'));
+  } else {
+    dColourFilt=val;
+    document.querySelectorAll('#colour-filters .ftag').forEach(b=>b.classList.remove('on'));
+  }
+  btn.classList.add('on');
+  renderDresses();
+}
+function fltD(v){dFilter=v.toLowerCase();renderDresses();}
+function calcBal(){
+  const a=parseFloat(document.getElementById('r-am').value)||0;
+  const d=parseFloat(document.getElementById('r-dp').value)||0;
+  document.getElementById('r-bl').value=a-d;
+}
+
+// ── CHIP HELPERS ──────────────────────────────────────────────
+function initChips(id){
+  document.querySelectorAll(`#${id} .chip`).forEach(c=>{
+    c.addEventListener('click',()=>c.classList.toggle('on'));
+  });
+}
+function getChips(id){
+  return Array.from(document.querySelectorAll(`#${id} .chip.on`)).map(c=>c.dataset.v).join(', ');
+}
+function setChips(id,val){
+  const selected=(val||'').split(',').map(s=>s.trim().toLowerCase());
+  document.querySelectorAll(`#${id} .chip`).forEach(c=>{
+    c.classList.toggle('on',selected.includes(c.dataset.v.toLowerCase()));
+  });
+}
+function clearChips(id){
+  document.querySelectorAll(`#${id} .chip`).forEach(c=>c.classList.remove('on'));
+}
+['c-colour','c-style','c-size','c-occ'].forEach(initChips);
+
+// ── PHOTO ─────────────────────────────────────────────────────
+// ── PHOTO — uploads to Google Drive so Cecelia sees it too ───
+let curPh=null, curPhMime='image/jpeg', editDId=null;
+
+function prevPh(e){
+  const f=e.target.files[0];if(!f)return;
+  curPhMime=f.type||'image/jpeg';
+  const rd=new FileReader();
+  rd.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
+      // Resize to max 800px for faster upload
+      const M=800;let w=img.width,h=img.height;
+      if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      curPh=c.toDataURL('image/jpeg',.78);
+      // Show preview immediately
+      const pr=document.getElementById('ph-pr');
+      pr.src=curPh;pr.style.display='block';
+      document.getElementById('ph-lbl').style.display='none';
+      document.getElementById('ph-rm').style.display='inline-flex';
+      document.getElementById('ph-status').textContent='📸 Photo ready — will upload to Drive on save';
+      document.getElementById('ph-status').style.color='var(--gold)';
+    };img.src=ev.target.result;
+  };rd.readAsDataURL(f);
+}
+
+async function uploadToDrive(base64, dressId){
+  // Send via hidden form POST to avoid URL length limits
+  return new Promise((resolve, reject) => {
+    const raw  = base64.replace(/^data:image\/\w+;base64,/, '');
+    const name = `dress_${dressId}.jpg`;
+    // Use a hidden iframe form to POST the image data
+    let ifr = document.getElementById('_ph_iframe');
+    if (!ifr) {
+      ifr = document.createElement('iframe');
+      ifr.id = '_ph_iframe';
+      ifr.name = '_ph_iframe';
+      ifr.style.display = 'none';
+      document.body.appendChild(ifr);
+    }
+    let frm = document.getElementById('_ph_form');
+    if (!frm) {
+      frm = document.createElement('form');
+      frm.id = '_ph_form';
+      frm.method = 'POST';
+      frm.target = '_ph_iframe';
+      frm.style.display = 'none';
+      document.body.appendChild(frm);
+    }
+    frm.action = GAS;
+    frm.innerHTML = `
+      <input name="payload" value="">
+    `;
+    const payload = JSON.stringify({action:'upload_photo', name, data: raw});
+    frm.querySelector('input[name="payload"]').value = payload;
+
+    // Since iframe POST can't return a value easily, we poll the sheet after upload
+    // For now resolve after 4 seconds (the drive upload takes ~2-3s)
+    ifr.onload = () => {
+      // Poll for the PhotoUrl after upload completes
+      setTimeout(async () => {
+        try {
+          const res = await fetch(GAS + '?action=read', {cache:'no-cache'});
+          const json = await res.json();
+          const dress = (json.dresses||[]).find(d => d.id === dressId);
+          if (dress && dress.PhotoUrl) {
+            resolve(dress.PhotoUrl);
+          } else {
+            reject(new Error('Photo uploaded but URL not found yet'));
+          }
+        } catch(e) {
+          reject(e);
+        }
+      }, 3000);
+    };
+    setTimeout(() => reject(new Error('Upload timeout')), 30000);
+    frm.submit();
+  });
+}
+
+function rmPh(){
+  curPh=null;
+  document.getElementById('ph-pr').style.display='none';
+  document.getElementById('ph-lbl').style.display='inline';
+  document.getElementById('ph-rm').style.display='none';
+  document.getElementById('ph-status').textContent='';
+  document.getElementById('ph-in').value='';
+}
+
+// ── RENDER ────────────────────────────────────────────────────
+function render(){renDash();renderDresses();renRentals();renFittings();renIncome();renExpenses();}
+
+function renDash(){
+  const ti=D.income.reduce((s,i)=>s+i.amount,0);
+  const te=D.expenses.reduce((s,e)=>s+e.amount,0);
+  document.getElementById('s-dr').textContent=D.dresses.length;
+  document.getElementById('s-re').textContent=D.dresses.filter(d=>d.status==='Rented').length;
+  document.getElementById('s-fi').textContent=D.fittings.filter(f=>f.status==='Pending').length;
+  document.getElementById('s-in').textContent=fmt(ti);
+  document.getElementById('s-ex').textContent=fmt(te);
+  const pr=ti-te;
+  const pel=document.getElementById('s-pr');
+  pel.textContent=fmt(pr);pel.style.color=pr>=0?'var(--grn)':'var(--red)';
+  const rec=[...D.rentals].reverse().slice(0,6);
+  document.getElementById('d-rt').innerHTML=!rec.length
+    ?'<tr><td colspan="6" style="text-align:center;color:var(--mid);padding:24px">No rentals yet</td></tr>'
+    :rec.map(r=>`<tr><td><div class="tn">${r.dress}</div></td><td>${r.client}</td><td>${r.eventDate||'—'}</td><td class="ap">${fmt(r.amount)}</td><td><span class="bx ${r.payment==='Fully Paid'?'ba':r.payment==='Deposit Paid'?'bor':'br'}">${r.payment||'Unpaid'}</span></td><td><span class="bx ${r.returned?'ba':'br'}">${r.returned?'Returned':'Active'}</span></td></tr>`).join('');
+}
+
+function renderDresses(){
+  let f=D.dresses.filter(d=>{
+    if(dFilter&&!(d.name||'').toLowerCase().includes(dFilter)&&!(d.desc||'').toLowerCase().includes(dFilter)) return false;
+    if(dStyleFilt!=='all'&&!(d.style||'').toLowerCase().includes(dStyleFilt.toLowerCase())) return false;
+    if(dColourFilt!=='all'&&!(d.colour||'').toLowerCase().includes(dColourFilt.toLowerCase())) return false;
+    return true;
+  });
+  const totalEarned=D.dresses.reduce((s,d)=>s+earned(d),0);
+  document.getElementById('d-tot').textContent=f.length;
+  document.getElementById('d-av').textContent=f.filter(d=>d.status==='Available').length;
+  document.getElementById('d-rn').textContent=f.filter(d=>d.status==='Rented').length;
+  document.getElementById('d-vl').textContent=fmt(f.reduce((s,d)=>s+(d.cost||0),0));
+  document.getElementById('d-ea').textContent=fmt(totalEarned);
+
+  // CARDS
+  document.getElementById('d-cards').innerHTML=!f.length
+    ?'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mid)">No dresses found</div>'
+    :f.map(d=>{
+      const ph=gPh(d);
+      const ea=earned(d);
+      const pct=d.cost>0?Math.min(100,Math.round(ea/d.cost*100)):0;
+      const tags=[d.colour,d.style,d.size].filter(Boolean).join(' · ');
+      return `<div class="dc">
+        <div class="di">
+          ${ph?`<img src="${ph}" alt="${d.name}">`:'👗'}
+          <div class="dpct">
+            <div class="plab">${fmt(ea)} earned of ${fmt(d.cost)}</div>
+            <div class="pbar"><div class="pfill${pct>=100?' full':''}" style="width:${pct}%"></div></div>
+          </div>
+        </div>
+        <div class="db">
+          <div class="dn">${d.name||'—'}</div>
+          <div class="dd">${d.desc||''}</div>
+          <div class="dp">${fmt(d.rental)} / rental</div>
+          <div class="dmet">
+            ${d.colour?`<span class="dtag">🎨 ${d.colour}</span>`:''}
+            ${d.style?`<span class="dtag">${d.style}</span>`:''}
+            ${d.size?`<span class="dtag">📏 ${d.size}</span>`:''}
+          </div>
+          <div class="dft">
+            <span class="bx ${d.status==='Available'?'ba':'br'}">${d.status}</span>
+            <div style="display:flex;gap:4px">
+              <button class="btn bo bsm" onclick="editD('${d.id}')">Edit</button>
+              <button class="btn bd bsm" onclick="delD('${d.id}')">✕</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+  // TABLE
+  document.getElementById('d-tbl').innerHTML=!f.length
+    ?'<tr><td colspan="11" style="text-align:center;color:var(--mid);padding:30px">No dresses</td></tr>'
+    :f.map(d=>{
+      const ph=gPh(d);
+      const ea=earned(d);
+      const pct=d.cost>0?Math.min(100,Math.round(ea/d.cost*100)):0;
+      return `<tr>
+        <td>${ph?`<img src="${ph}" class="tim">`:'<div class="tph">👗</div>'}</td>
+        <td><div class="tn">${d.name||'—'}</div></td>
+        <td style="font-size:12px">${d.desc||'—'}</td>
+        <td style="font-size:11px">${d.colour||'—'}</td>
+        <td style="font-size:11px">${d.size||'—'}</td>
+        <td>${fmt(d.cost)}</td>
+        <td class="ap">${fmt(d.rental)}</td>
+        <td class="ap">${fmt(ea)}</td>
+        <td>
+          <div style="width:60px;height:5px;background:var(--bdr);border-radius:3px;overflow:hidden">
+            <div style="width:${pct}%;height:100%;background:${pct>=100?'var(--gold)':'var(--grn)'};border-radius:3px"></div>
+          </div>
+          <div style="font-size:10px;color:var(--mid);margin-top:2px">${pct}%</div>
+        </td>
+        <td><span class="bx ${d.status==='Available'?'ba':'br'}">${d.status}</span></td>
+        <td><div style="display:flex;gap:4px">
+          <button class="btn bo bsm" onclick="editD('${d.id}')">Edit</button>
+          <button class="btn bd bsm" onclick="delD('${d.id}')">✕</button>
+        </div></td>
+      </tr>`;
+    }).join('');
+}
+
+function renRentals(){
+  const act=D.rentals.filter(r=>!r.returned);
+  document.getElementById('r-tot').textContent=D.rentals.length;
+  document.getElementById('r-act').textContent=act.length;
+  document.getElementById('r-ret').textContent=D.rentals.filter(r=>r.returned).length;
+  document.getElementById('r-ern').textContent=fmt(D.rentals.reduce((s,r)=>s+r.amount,0));
+  document.getElementById('r-out').textContent=fmt(act.reduce((s,r)=>s+(r.amount-r.deposit),0));
+  document.getElementById('r-tbl').innerHTML=!D.rentals.length
+    ?'<tr><td colspan="10" style="text-align:center;color:var(--mid);padding:30px">No rentals yet</td></tr>'
+    :[...D.rentals].reverse().map(r=>`<tr>
+      <td><div class="tn" style="font-size:13px">${r.dress}</div></td>
+      <td><b>${r.client}</b>${r.phone?`<br><span style="font-size:11px;color:var(--mid)">📱${r.phone}</span>`:''}</td>
+      <td style="font-size:12px">${r.eventDate||'—'}</td>
+      <td style="font-size:12px">${r.returnDate||'—'}</td>
+      <td class="ap">${fmt(r.amount)}</td>
+      <td>${fmt(r.deposit)}</td>
+      <td class="${(r.amount-r.deposit)>0?'an':''}">${fmt(r.amount-r.deposit)}</td>
+      <td><span class="bx ${r.payment==='Fully Paid'?'ba':r.payment==='Deposit Paid'?'bor':'br'}">${r.payment||'Unpaid'}</span></td>
+      <td><span class="bx ${r.returned?'ba':'br'}">${r.returned?'Returned':'Active'}</span></td>
+      <td><div style="display:flex;gap:3px;flex-wrap:wrap">
+        ${!r.returned?`<button class="btn bgr bsm" onclick="markRet('${r.id}')">✓ Returned</button>`:''}
+        ${r.phone?`<button class="btn bo bsm" onclick="waMsg('${r.phone}','${r.client}','${r.dress}',${r.amount-r.deposit})">💬</button>`:''}
+        <button class="btn bd bsm" onclick="delRental('${r.id}')">✕</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function renFittings(){
+  document.getElementById('f-tot').textContent=D.fittings.length;
+  document.getElementById('f-pen').textContent=D.fittings.filter(f=>f.status==='Pending').length;
+  document.getElementById('f-con').textContent=D.fittings.filter(f=>f.status==='Confirmed').length;
+  document.getElementById('f-com').textContent=D.fittings.filter(f=>f.status==='Completed').length;
+  document.getElementById('f-tbl').innerHTML=!D.fittings.length
+    ?'<tr><td colspan="7" style="text-align:center;color:var(--mid);padding:30px">No fittings yet</td></tr>'
+    :[...D.fittings].reverse().map(f=>`<tr>
+      <td><b>${f.client}</b></td>
+      <td>${f.phone?`<a href="https://wa.me/${f.phone.replace(/\D/g,'')}" target="_blank" style="color:var(--grn)">📱${f.phone}</a>`:'-'}</td>
+      <td style="font-size:12px">${f.date||'—'}</td>
+      <td style="font-size:12px">${f.dress||'—'}</td>
+      <td style="font-size:12px">${f.loc||'—'}</td>
+      <td><span class="bx ${f.status==='Confirmed'?'ba':f.status==='Completed'?'bbl':'bor'}">${f.status}</span></td>
+      <td><div style="display:flex;gap:3px;flex-wrap:wrap">
+        ${f.status==='Pending'?`<button class="btn bgr bsm" onclick="confF('${f.id}')">✓ Confirm</button><button class="btn bd bsm" onclick="decF('${f.id}')">✕</button>`:''}
+        ${f.status==='Confirmed'?`<button class="btn bo bsm" onclick="compF('${f.id}')">Done</button>`:''}
+      </div></td>
+    </tr>`).join('');
+}
+
+function renIncome(){
+  document.getElementById('i-tot').textContent=fmt(D.income.reduce((s,i)=>s+i.amount,0));
+  document.getElementById('i-ren').textContent=fmt(D.income.filter(i=>i.cat==='Rental').reduce((s,i)=>s+i.amount,0));
+  document.getElementById('i-sal').textContent=fmt(D.income.filter(i=>i.cat==='Sale').reduce((s,i)=>s+i.amount,0));
+  document.getElementById('i-oth').textContent=fmt(D.income.filter(i=>!['Rental','Sale'].includes(i.cat)).reduce((s,i)=>s+i.amount,0));
+  document.getElementById('i-tbl').innerHTML=!D.income.length
+    ?'<tr><td colspan="5" style="text-align:center;color:var(--mid);padding:30px">No income yet</td></tr>'
+    :[...D.income].reverse().map(i=>`<tr><td style="font-size:12px">${i.date}</td><td>${i.desc}</td><td><span class="bx ba">${i.cat}</span></td><td class="ap">${fmt(i.amount)}</td><td><button class="btn bd bsm" onclick="delInc('${i.id}')">✕</button></td></tr>`).join('');
+}
+
+function renExpenses(){
+  document.getElementById('e-tot').textContent=fmt(D.expenses.reduce((s,e)=>s+e.amount,0));
+  document.getElementById('e-dr').textContent=fmt(D.expenses.filter(e=>e.cat==='Dresses').reduce((s,e)=>s+e.amount,0));
+  document.getElementById('e-op').textContent=fmt(D.expenses.filter(e=>['Operations','Alterations','Transport'].includes(e.cat)).reduce((s,e)=>s+e.amount,0));
+  document.getElementById('e-mk').textContent=fmt(D.expenses.filter(e=>e.cat==='Marketing').reduce((s,e)=>s+e.amount,0));
+  document.getElementById('e-tbl').innerHTML=!D.expenses.length
+    ?'<tr><td colspan="5" style="text-align:center;color:var(--mid);padding:30px">No expenses yet</td></tr>'
+    :[...D.expenses].reverse().map(e=>`<tr><td style="font-size:12px">${e.date}</td><td>${e.desc}</td><td><span class="bx br">${e.cat}</span></td><td class="an">${fmt(e.amount)}</td><td><button class="btn bd bsm" onclick="delExp('${e.id}')">✕</button></td></tr>`).join('');
+}
+
+// ── CALENDAR ─────────────────────────────────────────────────
+function chM(d){calM+=d;if(calM>11){calM=0;calY++;}if(calM<0){calM=11;calY--;}renderCal();}
+function renderCal(){
+  const MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-t').textContent=MN[calM]+' '+calY;
+  document.getElementById('cal-h').innerHTML=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>`<div class="ch">${d}</div>`).join('');
+  const first=new Date(calY,calM,1).getDay(),days=new Date(calY,calM+1,0).getDate(),t=today();
+  let h='';
+  for(let i=0;i<first;i++)h+='<div></div>';
+  for(let d=1;d<=days;d++){
+    const ds=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const fits=D.fittings.filter(f=>f.date===ds);
+    const rents=D.rentals.filter(r=>r.eventDate===ds&&!r.returned);
+    const blks=D.blocks.filter(b=>ds>=b.from&&ds<=b.to);
+    let cls='cd';
+    if(ds===t)cls+=' tod';
+    if(blks.length)cls+=' blk';
+    else if(fits.length||rents.length)cls+=' hev';
+    h+=`<div class="${cls}"><div class="cn">${d}</div>${fits.map(f=>`<div class="ce" style="color:var(--blue)">📌${f.client}</div>`).join('')}${rents.map(r=>`<div class="ce" style="color:var(--pink)">👗${r.dress}</div>`).join('')}${blks.map(b=>`<div class="ce" style="color:var(--red)">🚫${b.reason||'Closed'}</div>`).join('')}</div>`;
+  }
+  document.getElementById('cal-d').innerHTML=h;
+}
+
+// ── MODALS ────────────────────────────────────────────────────
+const closeM=id=>document.getElementById(id).classList.remove('on');
+
+function openDM(id){
+  editDId=id||null;
+  const d=id?D.dresses.find(x=>x.id===id):null;
+  document.getElementById('dm-t').textContent=d?'Edit Dress':'Add Dress';
+  document.getElementById('d-na').value=d?.name||'';
+  document.getElementById('d-de').value=d?.desc||'';
+  document.getElementById('d-co').value=d?.cost||'';
+  document.getElementById('d-re').value=d?.rental||'';
+  document.getElementById('d-lo').value=d?.loc||'Klerksdorp';
+  document.getElementById('d-st').value=d?.status||'Available';
+  setChips('c-colour',d?.colour||'');
+  setChips('c-style',d?.style||'');
+  setChips('c-size',d?.size||'');
+  setChips('c-occ',d?.occ||'');
+  curPh=null; // reset — only set when user picks new photo
+  document.getElementById('ph-status').textContent='';
+  const pr=document.getElementById('ph-pr');
+  const existingPhoto = d ? (d.driveUrl || gPhL(d.id)) : null;
+  if(existingPhoto){
+    pr.src=existingPhoto;pr.style.display='block';
+    document.getElementById('ph-lbl').style.display='none';
+    document.getElementById('ph-rm').style.display='inline-flex';
+    document.getElementById('ph-status').textContent=d?.driveUrl?'✅ Photo synced to Drive':'📱 Photo saved locally only';
+    document.getElementById('ph-status').style.color=d?.driveUrl?'var(--grn)':'var(--mid)';
+  }else{
+    pr.src='';pr.style.display='none';
+    document.getElementById('ph-lbl').style.display='inline';
+    document.getElementById('ph-rm').style.display='none';
+  }
+  document.getElementById('ph-in').value='';
+  document.getElementById('dm').classList.add('on');
+}
+const editD=id=>openDM(id);
+
+async function saveDress(){
+  const saveBtn=document.getElementById('dm-save');
+  saveBtn.disabled=true;saveBtn.textContent='Saving…';
+  const id=editDId||uid();
+  const obj={
+    id,
+    name:document.getElementById('d-na').value.trim(),
+    desc:document.getElementById('d-de').value.trim(),
+    cost:parseFloat(document.getElementById('d-co').value)||0,
+    rental:parseFloat(document.getElementById('d-re').value)||0,
+    colour:getChips('c-colour'),
+    style:getChips('c-style'),
+    size:getChips('c-size'),
+    occ:getChips('c-occ'),
+    loc:document.getElementById('d-lo').value,
+    status:document.getElementById('d-st').value,
+    driveUrl: editDId ? (D.dresses.find(d=>d.id===editDId)?.driveUrl||'') : '',
+  };
+
+  // Upload photo to Drive if a new one was selected
+  if(curPh){
+    try{
+      const st=document.getElementById('ph-status');
+      st.textContent='⬆️ Uploading photo to Drive…';st.style.color='var(--gold)';
+      const driveUrl=await uploadToDrive(curPh,id);
+      obj.driveUrl=driveUrl;
+      // Also cache locally for instant display
+      sPhL(id,curPh);
+      st.textContent='✅ Photo uploaded!';st.style.color='var(--grn)';
+    }catch(err){
+      // Upload failed — keep local copy as fallback
+      sPhL(id,curPh);
+      document.getElementById('ph-status').textContent='⚠️ Drive upload failed — photo saved locally only';
+      document.getElementById('ph-status').style.color='var(--red)';
+    }
+  } else if(editDId&&!curPh&&!obj.driveUrl){
+    rPhL(id);
+  }
+
+  if(editDId)D.dresses=D.dresses.map(d=>d.id===editDId?obj:d);
+  else D.dresses.push(obj);
+
+  saveBtn.disabled=false;saveBtn.textContent='Save Dress';
+  closeM('dm');render();toast('Dress saved ✨','ok');syncNow();
+}
+function delD(id){if(!confirm('Delete?'))return;D.dresses=D.dresses.filter(d=>d.id!==id);rPhL(id);render();syncNow();}
+
+function openRM(){
+  const avail=D.dresses.filter(d=>d.status==='Available');
+  document.getElementById('r-dr').innerHTML=avail.length
+    ?avail.map(d=>`<option value="${d.name||d.desc}">${d.name?d.name+' — ':''}${d.desc}${d.colour?' ('+d.colour+')':''}${d.size?' '+d.size:''}</option>`).join('')
+    :'<option value="">No available dresses</option>';
+  ['r-cl','r-ph','r-no'].forEach(i=>document.getElementById(i).value='');
+  ['r-ed','r-rd','r-am','r-dp','r-bl'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('r-py').value='Unpaid';
+  document.getElementById('rm').classList.add('on');
+}
+function saveRental(){
+  const dress=document.getElementById('r-dr').value;
+  const client=document.getElementById('r-cl').value.trim();
+  if(!dress||!client){alert('Please select a dress and enter client name.');return;}
+  const amount=parseFloat(document.getElementById('r-am').value)||0;
+  const deposit=parseFloat(document.getElementById('r-dp').value)||0;
+  const payment=document.getElementById('r-py').value;
+  const r={id:uid(),date:today(),dress,client,phone:document.getElementById('r-ph').value.trim(),eventDate:document.getElementById('r-ed').value,returnDate:document.getElementById('r-rd').value,amount,deposit,payment,loc:document.getElementById('r-lo').value,notes:document.getElementById('r-no').value.trim(),returned:false};
+  D.rentals.push(r);
+  D.dresses=D.dresses.map(d=>(d.name===dress||d.desc===dress)?{...d,status:'Rented'}:d);
+  if(deposit>0)D.income.push({id:uid(),date:today(),desc:`Deposit — ${dress} (${client})`,cat:'Deposit',amount:deposit});
+  if(payment==='Fully Paid'&&(amount-deposit)>0)D.income.push({id:uid(),date:today(),desc:`Rental — ${dress} (${client})`,cat:'Rental',amount:amount-deposit});
+  closeM('rm');render();toast('Rental confirmed ✨','ok');syncNow();
+}
+function markRet(id){
+  const r=D.rentals.find(x=>x.id===id);if(!r)return;
+  r.returned=true;
+  const bal=(r.amount||0)-(r.deposit||0);
+  if(bal>0&&r.payment!=='Fully Paid'){
+    if(confirm(`Add outstanding ${fmt(bal)} to income?`)){
+      D.income.push({id:uid(),date:today(),desc:`Balance — ${r.dress} (${r.client})`,cat:'Rental',amount:bal});
+      r.payment='Fully Paid';
+    }
+  }
+  D.dresses=D.dresses.map(d=>(d.name===r.dress||d.desc===r.dress)?{...d,status:'Available'}:d);
+  render();toast('Marked as returned ✓','ok');syncNow();
+}
+function delRental(id){if(!confirm('Delete?'))return;D.rentals=D.rentals.filter(r=>r.id!==id);render();syncNow();}
+
+function confF(id){
+  const f=D.fittings.find(x=>x.id===id);if(!f)return;
+  f.status='Confirmed';render();
+  if(f.phone){const n=f.phone.replace(/\D/g,'');window.open(`https://wa.me/${n}?text=${encodeURIComponent(`Hi ${f.client}! 💕 Your fitting at Once Upon a Dress is CONFIRMED${f.date?' for '+f.date:''}. We can't wait to see you! ✨`)}`,'_blank');}
+  toast('Fitting confirmed ✓','ok');syncNow();
+}
+function decF(id){if(!confirm('Decline?'))return;D.fittings=D.fittings.filter(f=>f.id!==id);render();syncNow();}
+function compF(id){const f=D.fittings.find(x=>x.id===id);if(!f)return;f.status='Completed';render();syncNow();}
+
+function openBM(){document.getElementById('b-fr').value=today();document.getElementById('b-to').value=today();document.getElementById('b-re').value='';document.getElementById('bm').classList.add('on');}
+function saveBlock(){
+  const from=document.getElementById('b-fr').value,to=document.getElementById('b-to').value;
+  if(!from||!to)return;
+  D.blocks.push({id:uid(),from,to,reason:document.getElementById('b-re').value.trim()});
+  closeM('bm');renderCal();toast('Dates blocked ✓','ok');syncNow();
+}
+
+function openIM(){document.getElementById('i-dt').value=today();document.getElementById('i-de').value='';document.getElementById('i-am').value='';document.getElementById('im').classList.add('on');}
+function saveInc(){
+  const amount=parseFloat(document.getElementById('i-am').value);if(!amount)return;
+  D.income.push({id:uid(),date:document.getElementById('i-dt').value,desc:document.getElementById('i-de').value.trim(),cat:document.getElementById('i-ca').value,amount});
+  closeM('im');render();toast('Income saved ✨','ok');syncNow();
+}
+function delInc(id){if(!confirm('Delete?'))return;D.income=D.income.filter(i=>i.id!==id);render();syncNow();}
+
+function openEM(){document.getElementById('e-dt').value=today();document.getElementById('e-de').value='';document.getElementById('e-am').value='';document.getElementById('em').classList.add('on');}
+function saveExp(){
+  const amount=parseFloat(document.getElementById('e-am').value);if(!amount)return;
+  D.expenses.push({id:uid(),date:document.getElementById('e-dt').value,desc:document.getElementById('e-de').value.trim(),cat:document.getElementById('e-ca').value,amount});
+  closeM('em');render();toast('Expense saved ✨','ok');syncNow();
+}
+function delExp(id){if(!confirm('Delete?'))return;D.expenses=D.expenses.filter(e=>e.id!==id);render();syncNow();}
+
+function waMsg(phone,client,dress,balance){
+  const n=(phone||'').replace(/\D/g,'');if(!n)return;
+  const m=balance>0?`Hi ${client}! 💕 Reminder: R${balance} outstanding for your ${dress} rental. ✨`:`Hi ${client}! 💕 Thank you for choosing Once Upon a Dress! ✨`;
+  window.open(`https://wa.me/${n}?text=${encodeURIComponent(m)}`,'_blank');
+}
+
+document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');}));
+
+// ── SEED DATA ─────────────────────────────────────────────────
+function seedDresses(){
+  return [
+    {id:'d001',name:'Rose',desc:'Pienk styf blinkers',cost:800,rental:350,colour:'Pink',style:'Sparkle, Fitted',size:'Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d002',name:'Scarlett',desc:'Maroon, straps, plain',cost:500,rental:250,colour:'Maroon',style:'Straps, Plain',size:'Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d003',name:'Obsidian',desc:'Swart, straps, plain',cost:500,rental:250,colour:'Black',style:'Straps, Plain',size:'Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d004',name:'Martini',desc:'Swart blinkers',cost:500,rental:250,colour:'Black',style:'Sparkle',size:'Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d005',name:'Rosette',desc:'Swart/blou blomme, styf bo en uit',cost:900,rental:400,colour:'Black',style:'Fitted',size:'Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d006',name:'Cosmic',desc:'Donker Blou, blinkers, straps',cost:400,rental:200,colour:'Dark Blue',style:'Straps, Sparkle',size:'Small-Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d007',name:'Ciel',desc:'Lig blou, cinderella vibes dikker bandjies',cost:1500,rental:600,colour:'Light Blue',style:'Ballgown',size:'Medium',occ:'Matric Farewell, Formal',loc:'Klerksdorp',status:'Available'},
+    {id:'d008',name:'Tiana',desc:'Helder Groen, strapless',cost:600,rental:300,colour:'Green',style:'Strapless',size:'Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d009',name:'',desc:'Lig blou, plain, flowy',cost:400,rental:200,colour:'Light Blue',style:'Plain, Flowy',size:'Small-Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d010',name:'',desc:'Glitter one shoulder',cost:200,rental:150,colour:'Multi',style:'One Shoulder, Sparkle',size:'Small',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d011',name:'',desc:'Red with bow - short',cost:350,rental:200,colour:'Red',style:'Short',size:'Small-Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d012',name:'',desc:'Black with bow - short',cost:350,rental:200,colour:'Black',style:'Short',size:'Small-Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d013',name:'',desc:'Maroon sparkle one shoulder small bow',cost:500,rental:250,colour:'Maroon',style:'One Shoulder, Sparkle',size:'Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d014',name:'',desc:'Pink Mesh dress',cost:900,rental:400,colour:'Pink',style:'Plain',size:'Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d015',name:'',desc:'Burnt orange high waisted fishbone',cost:1000,rental:450,colour:'Orange',style:'Fitted',size:'Small-Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d016',name:'',desc:'Sequin Mesh Maroon princess dress',cost:1400,rental:600,colour:'Maroon',style:'Ballgown, Sparkle',size:'Medium',occ:'Matric Farewell, Formal',loc:'Klerksdorp',status:'Available'},
+    {id:'d017',name:'',desc:'Pastel Yellow flow - plain',cost:600,rental:300,colour:'Yellow',style:'Plain, Flowy',size:'Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d018',name:'',desc:'Baby pink, strapless with bow - princess dress',cost:700,rental:350,colour:'Baby Pink',style:'Strapless, Ballgown',size:'Small-Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d019',name:'',desc:'Black tight long strapless',cost:650,rental:300,colour:'Black',style:'Strapless, Fitted',size:'Small-Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d020',name:'',desc:'Bright red sparkle one shoulder long',cost:600,rental:300,colour:'Red',style:'One Shoulder, Sparkle',size:'Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+    {id:'d021',name:'',desc:'Turquoise sparkle medium/long',cost:300,rental:200,colour:'Turquoise',style:'Sparkle',size:'Small-Medium',occ:'General',loc:'Klerksdorp',status:'Available'},
+  ];
+}
+function seedExpenses(){
+  return [
+    {id:'e001',date:'2025-01-01',desc:'Dresses - initial purchase',cat:'Dresses',amount:13650},
+    {id:'e002',date:'2025-01-01',desc:'Clothing rack',cat:'Operations',amount:600},
+    {id:'e003',date:'2025-01-01',desc:'Register company',cat:'Operations',amount:170},
+    {id:'e004',date:'2025-01-01',desc:'Dress adjustments',cat:'Alterations',amount:2000},
+    {id:'e005',date:'2025-01-01',desc:'Dress bags',cat:'Operations',amount:480},
+  ];
+}
+
+// ── BOOT ─────────────────────────────────────────────────────
+(async function boot(){
+  render();setSS('busy');
+  try{
+    await readSheets();
+    if(!D.dresses.length){D.dresses=seedDresses();D.expenses=seedExpenses();writeSheets();}
+    render();setSS('ok');toast('Loaded ✨','ok');
+  }catch(e){
+    if(!D.dresses.length){D.dresses=seedDresses();D.expenses=seedExpenses();}
+    render();setSS('err');toast('Could not reach Sheets','er');
+  }
+  setInterval(async()=>{try{await readSheets();render();setSS('ok');}catch(e){setSS('err');}},120000);
+})();
+</script>
+</body>
+</html>
