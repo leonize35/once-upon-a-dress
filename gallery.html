@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Once Upon a Dress</title>
+<meta name="description" content="Rent stunning gowns for weddings, matric farewells, formals and special occasions in Klerksdorp and Potchefstroom.">
+<meta name="theme-color" content="#2C2C2C">
+<link rel="manifest" href="data:application/json,{}">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
+:root{
+  --gold:#C9A84C;--gp:#FBF7EE;--gl:#E8D5A3;
+  --pink:#D45380;--pkl:#F9EDF2;
+  --cream:#FDFAF5;--dark:#2C2C2C;--mid:#6B6B6B;--bdr:#E8E0D0;
+  --grn:#4CAF7D;--grnl:#EDF7F2;
+  --red:#E05252;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden;}
+
+/* ── HEADER ── */
+.hdr{background:var(--dark);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:100;}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--gold);}
+.logo em{color:#fff;font-style:italic;}
+.hdr-right{display:flex;align-items:center;gap:10px;}
+.filter-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;padding:7px 14px;border-radius:20px;cursor:pointer;position:relative;}
+.filter-badge{position:absolute;top:-4px;right:-4px;background:var(--gold);color:#fff;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center;}
+.filter-badge.show{display:flex;}
+.search-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;}
+
+/* ── SEARCH BAR (slides down) ── */
+.search-bar{background:var(--dark);padding:0 16px;max-height:0;overflow:hidden;transition:max-height .3s,padding .3s;}
+.search-bar.open{max-height:60px;padding:0 16px 12px;}
+.search-bar input{width:100%;padding:10px 16px;font-family:'Inter',sans-serif;font-size:14px;border:none;border-radius:24px;background:rgba(255,255,255,.1);color:#fff;outline:none;}
+.search-bar input::placeholder{color:rgba(255,255,255,.4);}
+
+/* ── DATE BANNER ── */
+.date-banner{background:#fff;border-bottom:1px solid var(--bdr);padding:10px 16px;}
+.date-inner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.date-lbl{font-size:12px;font-weight:500;color:var(--dark);}
+.date-input{padding:7px 12px;border:1.5px solid var(--bdr);border-radius:20px;font-family:'Inter',sans-serif;font-size:13px;outline:none;background:var(--cream);flex:1;min-width:140px;}
+.date-input:focus{border-color:var(--gold);}
+.date-clear{font-size:12px;color:var(--mid);cursor:pointer;white-space:nowrap;}
+.date-note{font-size:11px;color:var(--mid);background:var(--gp);padding:4px 10px;border-radius:20px;border:1px solid var(--gl);}
+
+/* ── RESULTS BAR ── */
+.results-bar{padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
+.results-count{font-size:12px;color:var(--mid);}
+.sort-btn{font-size:12px;color:var(--mid);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;}
+
+/* ── GALLERY GRID ── */
+.gallery{padding:0 12px 100px;}
+.gg{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+@media(min-width:480px){.gg{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:700px){.gg{grid-template-columns:repeat(4,1fr);}}
+
+/* ── DRESS CARD ── */
+.dcard{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:transform .15s;}
+.dcard:active{transform:scale(.98);}
+.dcard.faded{opacity:.45;}
+.cim{width:100%;aspect-ratio:2/3;background:var(--gp);display:flex;align-items:center;justify-content:center;font-size:40px;overflow:hidden;position:relative;}
+.cim img{width:100%;height:100%;object-fit:cover;display:block;}
+.cbdg{position:absolute;top:8px;left:8px;font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;}
+.avail{background:var(--grn);color:#fff;}
+.rented{background:var(--pink);color:#fff;}
+.dok{background:var(--gold);color:#fff;}
+.dno{background:rgba(0,0,0,.6);color:#fff;}
+.cbo{padding:10px 10px 12px;}
+.cname{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;margin-bottom:1px;line-height:1.2;}
+.cdesc{font-size:11px;color:var(--mid);line-height:1.3;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.ctag-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;}
+.ctag{font-size:10px;padding:2px 6px;border-radius:10px;background:var(--gp);color:var(--mid);}
+.cprice{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--gold);margin-bottom:8px;}
+.cprice span{font-size:11px;font-weight:400;color:var(--mid);font-family:'Inter',sans-serif;}
+.cactions{display:flex;gap:6px;}
+.bkbtn{flex:1;background:var(--pink);color:#fff;border:none;border-radius:10px;padding:9px 8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;cursor:pointer;text-align:center;}
+.wabtn{width:38px;height:38px;background:var(--gp);border:1px solid var(--bdr);border-radius:10px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:18px;flex-shrink:0;}
+.tbtn{flex:1;background:#eee;color:#999;border:none;border-radius:10px;padding:9px 8px;font-family:'Inter',sans-serif;font-size:11px;cursor:not-allowed;text-align:center;}
+
+/* ── LOADING ── */
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner{width:28px;height:28px;border:3px solid var(--gl);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:40px auto 12px;}
+.load-txt{text-align:center;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--dark);padding-bottom:20px;}
+.empty{text-align:center;padding:60px 20px;color:var(--mid);grid-column:1/-1;}
+.empty-icon{font-size:40px;margin-bottom:12px;}
+.empty h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--dark);margin-bottom:6px;}
+
+/* ── FILTER PANEL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;}
+.overlay.open{opacity:1;pointer-events:all;}
+.filter-panel{position:fixed;right:0;top:0;bottom:0;width:min(320px,90vw);background:#fff;z-index:201;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column;}
+.filter-panel.open{transform:none;}
+.fp-hdr{padding:20px 16px 12px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1;}
+.fp-hdr h3{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;}
+.fp-close{background:var(--gp);border:none;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.fp-body{padding:16px;flex:1;}
+.fp-section{margin-bottom:20px;}
+.fp-section h4{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--mid);margin-bottom:10px;}
+.fp-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.fchip{font-family:'Inter',sans-serif;font-size:12px;padding:6px 12px;border-radius:20px;border:1px solid var(--bdr);background:#fff;color:var(--mid);cursor:pointer;transition:all .15s;}
+.fchip:hover{border-color:var(--gold);}
+.fchip.on{background:var(--gold);color:#fff;border-color:var(--gold);}
+.fp-footer{padding:16px;border-top:1px solid var(--bdr);display:flex;gap:8px;position:sticky;bottom:0;background:#fff;}
+.fp-apply{flex:1;background:var(--gold);color:#fff;border:none;border-radius:10px;padding:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;cursor:pointer;}
+.fp-clear{background:#fff;color:var(--mid);border:1px solid var(--bdr);border-radius:10px;padding:12px 16px;font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;}
+
+/* ── BOOKING MODAL ── */
+.mo{display:none;position:fixed;inset:0;z-index:300;align-items:flex-end;justify-content:center;}
+.mo.open{display:flex;}
+.mo-bg{position:absolute;inset:0;background:rgba(0,0,0,.6);}
+.md{position:relative;background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom);}
+.md-hdr{background:var(--dark);padding:20px 20px 16px;border-radius:20px 20px 0 0;position:relative;}
+.md-hdr h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:#fff;}
+.md-hdr h2 em{color:var(--gold);font-style:italic;}
+.md-hdr p{font-size:12px;color:rgba(255,255,255,.5);margin-top:3px;}
+.md-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;}
+.dress-chip{background:var(--pkl);color:var(--pink);font-size:12px;padding:8px 16px;display:flex;align-items:center;gap:6px;}
+.dress-chip strong{font-weight:600;}
+.md-body{padding:16px;}
+.fg{margin-bottom:12px;}
+.fg label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mid);margin-bottom:4px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 14px;font-family:'Inter',sans-serif;font-size:14px;border:1.5px solid var(--bdr);border-radius:10px;background:var(--cream);outline:none;-webkit-appearance:none;}
+.fg input:focus,.fg select:focus{border-color:var(--gold);}
+.type-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
+.type-opt{border:1.5px solid var(--bdr);border-radius:10px;padding:10px 6px;text-align:center;cursor:pointer;transition:all .15s;}
+.type-opt:hover{border-color:var(--gold);}
+.type-opt.on{border-color:var(--gold);background:var(--gp);}
+.type-opt .icon{font-size:20px;display:block;margin-bottom:3px;}
+.type-opt .lbl{font-size:11px;font-weight:500;}
+.submit-btn{width:100%;background:var(--pink);color:#fff;border:none;border-radius:12px;padding:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:500;cursor:pointer;margin-top:16px;}
+.submit-btn:disabled{background:#ccc;}
+.success-wrap{text-align:center;padding:32px 20px;}
+.success-wrap .icon{font-size:52px;margin-bottom:12px;}
+.success-wrap h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;margin-bottom:8px;}
+.success-wrap p{font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:20px;}
+.success-wrap button{background:var(--dark);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-family:'Inter',sans-serif;font-size:14px;cursor:pointer;}
+
+/* ── TRACK ── */
+.track-section{background:var(--gp);border:1px solid var(--gl);border-radius:14px;margin:12px 12px 0;padding:14px;}
+.track-section h4{font-size:13px;font-weight:600;margin-bottom:8px;}
+.track-input-wrap{display:flex;gap:8px;}
+.track-input-wrap input{flex:1;padding:9px 14px;font-family:'Inter',sans-serif;font-size:13px;border:1.5px solid var(--bdr);border-radius:10px;background:#fff;outline:none;}
+.track-input-wrap input:focus{border-color:var(--gold);}
+.track-input-wrap button{background:var(--dark);color:#fff;border:none;border-radius:10px;padding:9px 14px;font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;}
+.track-result{margin-top:10px;}
+.tcard{background:#fff;border-radius:10px;padding:12px;margin-top:8px;border:1px solid var(--bdr);}
+.tcard .tname{font-weight:600;font-size:13px;margin-bottom:3px;}
+.tcard .tmeta{font-size:11px;color:var(--mid);line-height:1.7;}
+.tstat{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;margin-bottom:5px;}
+.ts-p{background:#FFF3E0;color:#E65100;}
+.ts-c{background:var(--grnl);color:var(--grn);}
+.ts-d{background:#fde;color:#c00;}
+
+/* ── ABOUT ── */
+.about{background:var(--dark);margin-top:20px;padding:48px 20px;text-align:center;}
+.atag{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:block;}
+.about h2{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,6vw,42px);font-weight:300;color:#fff;line-height:1.2;margin-bottom:12px;}
+.about h2 em{font-style:italic;color:var(--gold);}
+.about p{font-size:13px;color:rgba(255,255,255,.5);line-height:1.8;margin-bottom:20px;max-width:480px;margin-left:auto;margin-right:auto;}
+.contact-cards{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.cc{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 18px;min-width:160px;text-align:left;}
+.cc .cy{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:2px;}
+.cc .cn{font-family:'Cormorant Garamond',serif;font-size:17px;color:#fff;margin-bottom:8px;}
+.cc a{display:flex;align-items:center;gap:6px;color:#fff;text-decoration:none;font-size:12px;background:var(--pink);padding:7px 12px;border-radius:8px;}
+footer{background:#111;padding:16px;text-align:center;}
+footer p{font-size:11px;color:rgba(255,255,255,.3);}
+footer em{color:var(--gold);font-style:normal;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="logo">Once Upon a <em>Dress</em></div>
+  <div class="hdr-right">
+    <div class="search-btn" onclick="toggleSearch()">🔍</div>
+    <div class="filter-btn" onclick="openFilters()">
+      🎨 Filter
+      <span class="filter-badge" id="fbadge">0</span>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="search-bar" id="search-bar">
+  <input type="text" placeholder="Search by name, colour, style…" oninput="onSearch(this.value)" id="search-input">
+</div>
+
+<!-- DATE PICKER -->
+<div class="date-banner">
+  <div class="date-inner">
+    <span class="date-lbl">✨ Event date:</span>
+    <input type="date" class="date-input" id="ev-date" onchange="onDate()">
+    <span class="date-clear" onclick="clearDate()" id="clr-btn" style="display:none">✕ Clear</span>
+  </div>
+  <div class="date-note" id="dt-note" style="display:none;margin-top:6px"></div>
+</div>
+
+<!-- TRACK BOOKING -->
+<div class="track-section">
+  <h4>🔍 Track your booking</h4>
+  <div class="track-input-wrap">
+    <input type="tel" id="track-in" placeholder="Your WhatsApp number">
+    <button onclick="trackBooking()">Search</button>
+  </div>
+  <div class="track-result" id="track-result"></div>
+</div>
+
+<!-- RESULTS BAR -->
+<div class="results-bar">
+  <div class="results-count" id="gcnt">Loading…</div>
+</div>
+
+<!-- GALLERY -->
+<div class="gallery">
+  <div id="gg-wrap"><div class="spinner"></div><div class="load-txt">Loading our collection…</div></div>
+</div>
+
+<!-- ABOUT -->
+<div class="about">
+  <span class="atag">About Us</span>
+  <h2>Your fairytale <em>starts here</em></h2>
+  <p>We believe every woman deserves to feel like the most beautiful person in the room. Stunning gowns for weddings, matric farewells, formals, birthdays and photoshoots.</p>
+  <div class="contact-cards">
+    <div class="cc"><div class="cy">Klerksdorp</div><div class="cn">Leonize</div><a href="https://wa.me/27XXXXXXXXXX" target="_blank">💬 WhatsApp</a></div>
+    <div class="cc"><div class="cy">Potchefstroom</div><div class="cn">Cecelia</div><a href="https://wa.me/27XXXXXXXXXX" target="_blank">💬 WhatsApp</a></div>
+  </div>
+</div>
+<footer><p>© 2025 <em>Once Upon a Dress</em> · Klerksdorp & Potchefstroom</p></footer>
+
+<!-- FILTER PANEL -->
+<div class="overlay" id="overlay" onclick="closeFilters()"></div>
+<div class="filter-panel" id="filter-panel">
+  <div class="fp-hdr">
+    <h3>Filter Dresses</h3>
+    <button class="fp-close" onclick="closeFilters()">✕</button>
+  </div>
+  <div class="fp-body">
+    <div class="fp-section">
+      <h4>Location</h4>
+      <div class="fp-chips">
+        <span class="fchip on" data-group="loc" data-v="all">All</span>
+        <span class="fchip" data-group="loc" data-v="Klerksdorp">📍 Klerksdorp</span>
+        <span class="fchip" data-group="loc" data-v="Potchefstroom">📍 Potchefstroom</span>
+      </div>
+    </div>
+    <div class="fp-section">
+      <h4>Style</h4>
+      <div class="fp-chips">
+        <span class="fchip on" data-group="style" data-v="all">All Styles</span>
+        <span class="fchip" data-group="style" data-v="Off Shoulder">Off Shoulder</span>
+        <span class="fchip" data-group="style" data-v="One Shoulder">One Shoulder</span>
+        <span class="fchip" data-group="style" data-v="Straps">Straps</span>
+        <span class="fchip" data-group="style" data-v="Strapless">Strapless</span>
+        <span class="fchip" data-group="style" data-v="Cocktail">Cocktail</span>
+        <span class="fchip" data-group="style" data-v="Ballgown">Ballgown</span>
+        <span class="fchip" data-group="style" data-v="Mermaid">Mermaid</span>
+        <span class="fchip" data-group="style" data-v="With Slit">With Slit</span>
+        <span class="fchip" data-group="style" data-v="Sparkle">✨ Sparkle</span>
+        <span class="fchip" data-group="style" data-v="Plain">Plain</span>
+        <span class="fchip" data-group="style" data-v="Flowy">Flowy</span>
+        <span class="fchip" data-group="style" data-v="Fitted">Fitted</span>
+        <span class="fchip" data-group="style" data-v="Short">Short</span>
+        <span class="fchip" data-group="style" data-v="Long">Long</span>
+      </div>
+    </div>
+    <div class="fp-section">
+      <h4>Colour</h4>
+      <div class="fp-chips">
+        <span class="fchip on" data-group="colour" data-v="all">All Colours</span>
+        <span class="fchip" data-group="colour" data-v="Pink">🩷 Pink</span>
+        <span class="fchip" data-group="colour" data-v="Baby Pink">🩷 Baby Pink</span>
+        <span class="fchip" data-group="colour" data-v="Hot Pink">Hot Pink</span>
+        <span class="fchip" data-group="colour" data-v="Red">❤️ Red</span>
+        <span class="fchip" data-group="colour" data-v="Maroon">🍷 Maroon</span>
+        <span class="fchip" data-group="colour" data-v="Orange">🧡 Orange</span>
+        <span class="fchip" data-group="colour" data-v="Yellow">💛 Yellow</span>
+        <span class="fchip" data-group="colour" data-v="Gold">✨ Gold</span>
+        <span class="fchip" data-group="colour" data-v="Green">💚 Green</span>
+        <span class="fchip" data-group="colour" data-v="Teal">Teal</span>
+        <span class="fchip" data-group="colour" data-v="Turquoise">Turquoise</span>
+        <span class="fchip" data-group="colour" data-v="Light Blue">💙 Light Blue</span>
+        <span class="fchip" data-group="colour" data-v="Dark Blue">💙 Dark Blue</span>
+        <span class="fchip" data-group="colour" data-v="Navy">Navy</span>
+        <span class="fchip" data-group="colour" data-v="Purple">💜 Purple</span>
+        <span class="fchip" data-group="colour" data-v="Lavender">Lavender</span>
+        <span class="fchip" data-group="colour" data-v="Black">🖤 Black</span>
+        <span class="fchip" data-group="colour" data-v="White">🤍 White</span>
+        <span class="fchip" data-group="colour" data-v="Cream">Cream</span>
+        <span class="fchip" data-group="colour" data-v="Nude">Nude</span>
+        <span class="fchip" data-group="colour" data-v="Glitter">✨ Glitter</span>
+        <span class="fchip" data-group="colour" data-v="Multi">🌈 Multi</span>
+      </div>
+    </div>
+    <div class="fp-section">
+      <h4>Size</h4>
+      <div class="fp-chips">
+        <span class="fchip on" data-group="size" data-v="all">All Sizes</span>
+        <span class="fchip" data-group="size" data-v="Small">Small</span>
+        <span class="fchip" data-group="size" data-v="Small-Medium">Small-Medium</span>
+        <span class="fchip" data-group="size" data-v="Medium">Medium</span>
+        <span class="fchip" data-group="size" data-v="Medium-Large">Medium-Large</span>
+        <span class="fchip" data-group="size" data-v="Large">Large</span>
+        <span class="fchip" data-group="size" data-v="Extra Large">Extra Large</span>
+      </div>
+    </div>
+    <div class="fp-section">
+      <h4>Occasion</h4>
+      <div class="fp-chips">
+        <span class="fchip on" data-group="occ" data-v="all">All Occasions</span>
+        <span class="fchip" data-group="occ" data-v="Wedding">💍 Wedding</span>
+        <span class="fchip" data-group="occ" data-v="Matric Farewell">🎓 Matric Farewell</span>
+        <span class="fchip" data-group="occ" data-v="Formal">Formal</span>
+        <span class="fchip" data-group="occ" data-v="Birthday">🎂 Birthday</span>
+        <span class="fchip" data-group="occ" data-v="Photoshoot">📸 Photoshoot</span>
+        <span class="fchip" data-group="occ" data-v="Baby Shower">Baby Shower</span>
+        <span class="fchip" data-group="occ" data-v="General">General</span>
+      </div>
+    </div>
+  </div>
+  <div class="fp-footer">
+    <button class="fp-clear" onclick="clearFilters()">Clear all</button>
+    <button class="fp-apply" onclick="applyFilters()">Show dresses</button>
+  </div>
+</div>
+
+<!-- BOOKING MODAL (slides up from bottom) -->
+<div class="mo" id="bk-modal">
+  <div class="mo-bg" onclick="closeBk()"></div>
+  <div class="md">
+    <div class="md-hdr">
+      <button class="md-close" onclick="closeBk()">✕</button>
+      <h2>Book Your <em>Dress</em> 💕</h2>
+      <p>We'll confirm via WhatsApp within 24 hours</p>
+    </div>
+    <div class="dress-chip" id="dress-chip" style="display:none">
+      👗 <strong id="dress-chip-name"></strong>
+    </div>
+    <div id="bk-form" class="md-body">
+      <div class="fg"><label>Your Name *</label><input type="text" id="bk-name" placeholder="Full name" autocomplete="name"></div>
+      <div class="fg"><label>WhatsApp Number *</label><input type="tel" id="bk-phone" placeholder="083 123 4567" autocomplete="tel"></div>
+      <div class="fg"><label>Type of Booking</label>
+        <div class="type-grid">
+          <div class="type-opt on" data-type="Rental" onclick="selType(this)"><span class="icon">👗</span><span class="lbl">Rental</span></div>
+          <div class="type-opt" data-type="Fitting" onclick="selType(this)"><span class="icon">📌</span><span class="lbl">Fitting</span></div>
+          <div class="type-opt" data-type="Enquiry" onclick="selType(this)"><span class="icon">💬</span><span class="lbl">Enquiry</span></div>
+        </div>
+      </div>
+      <div class="fg"><label id="bk-date-lbl">Event Date</label><input type="date" id="bk-date" min=""></div>
+      <div class="fg"><label>Location</label>
+        <select id="bk-loc"><option value="Klerksdorp">Klerksdorp</option><option value="Potchefstroom">Potchefstroom</option></select>
+      </div>
+      <div class="fg"><label>Notes (size, colour preference, questions…)</label>
+        <textarea id="bk-notes" rows="2" style="border:1.5px solid var(--bdr);border-radius:10px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;background:var(--cream);outline:none;resize:none;width:100%"></textarea>
+      </div>
+      <button class="submit-btn" id="bk-submit" onclick="submitBooking()">Send Booking Request 💕</button>
+    </div>
+    <div id="bk-success" class="success-wrap" style="display:none">
+      <div class="icon">✨</div>
+      <h3>Request Sent!</h3>
+      <p>Thank you, <strong id="bk-sname"></strong>! We received your request and will WhatsApp you within 24 hours. We can't wait to dress you! 💕</p>
+      <button onclick="closeBk()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SB_URL='https://bpiuqroaxooomhqcvrbw.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwaXVxcm9heG9vb21ocWN2cmJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzMDE4OTksImV4cCI6MjA5OTg3Nzg5OX0.LoyFzVe8XZVBF5nDFVLzWUFW0SsB4uwkw71sMtEYuXA';
+const HDR={'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+const WA_LEO='27XXXXXXXXXX';
+const WA_CEC='27XXXXXXXXXX';
+
+let allDresses=[],allRentals=[],searchQ='',evDate='',bkDressId='',bkDressName='';
+let activeFilters={loc:'all',style:'all',colour:'all',size:'all',occ:'all'};
+let pendingFilters={loc:'all',style:'all',colour:'all',size:'all',occ:'all'};
+
+document.getElementById('ev-date').min=new Date().toISOString().split('T')[0];
+document.getElementById('bk-date').min=new Date().toISOString().split('T')[0];
+
+// ── LOAD ───────────────────────────────────────────────────
+async function load(){
+  try{
+    const [dr,rn]=await Promise.all([
+      fetch(`${SB_URL}/rest/v1/dresses?select=*&order=id.asc`,{headers:HDR}).then(r=>r.json()),
+      fetch(`${SB_URL}/rest/v1/rentals?select=dress_id,event_date,return_date,returned`,{headers:HDR}).then(r=>r.json()),
+    ]);
+    allDresses=dr;allRentals=rn;
+    render();
+  }catch(e){
+    document.getElementById('gg-wrap').innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--mid)">⚠️ Could not load — please refresh</div>';
+  }
+}
+
+// ── AVAILABILITY ───────────────────────────────────────────
+function isAvail(dress,date){
+  if(!date)return null;
+  const conflict=allRentals.filter(r=>{
+    if(r.returned||r.dress_id!==dress.id)return false;
+    const ed=r.event_date||'',rd=r.return_date||ed;
+    return ed&&date>=ed&&date<=rd;
+  });
+  return conflict.length===0;
+}
+function fmtDate(d){if(!d)return'';return new Date(d+'T00:00:00').toLocaleDateString('en-ZA',{day:'numeric',month:'long',year:'numeric'});}
+
+// ── SEARCH ─────────────────────────────────────────────────
+let searchOpen=false;
+function toggleSearch(){
+  searchOpen=!searchOpen;
+  document.getElementById('search-bar').classList.toggle('open',searchOpen);
+  if(searchOpen)setTimeout(()=>document.getElementById('search-input').focus(),300);
+}
+function onSearch(v){searchQ=v.toLowerCase();render();}
+
+// ── DATE ───────────────────────────────────────────────────
+function onDate(){
+  evDate=document.getElementById('ev-date').value;
+  document.getElementById('clr-btn').style.display=evDate?'inline':'none';
+  const n=document.getElementById('dt-note');
+  n.style.display=evDate?'block':'none';
+  if(evDate)n.textContent=`Showing availability for ${fmtDate(evDate)}`;
+  render();
+}
+function clearDate(){evDate='';document.getElementById('ev-date').value='';document.getElementById('clr-btn').style.display='none';document.getElementById('dt-note').style.display='none';render();}
+
+// ── FILTERS ────────────────────────────────────────────────
+function openFilters(){
+  // Copy active to pending
+  pendingFilters={...activeFilters};
+  // Reflect in UI
+  document.querySelectorAll('.fchip').forEach(c=>{
+    const g=c.dataset.group,v=c.dataset.v;
+    c.classList.toggle('on',pendingFilters[g]===v);
+  });
+  document.getElementById('filter-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeFilters(){
+  document.getElementById('filter-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function applyFilters(){
+  activeFilters={...pendingFilters};
+  updateBadge();
+  closeFilters();
+  render();
+}
+function clearFilters(){
+  pendingFilters={loc:'all',style:'all',colour:'all',size:'all',occ:'all'};
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.toggle('on',c.dataset.v==='all'));
+}
+function updateBadge(){
+  const count=Object.values(activeFilters).filter(v=>v!=='all').length;
+  const badge=document.getElementById('fbadge');
+  badge.textContent=count;
+  badge.classList.toggle('show',count>0);
+}
+
+// Chip selection in panel — one selection per group
+document.querySelectorAll('.fchip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    const g=chip.dataset.group;
+    document.querySelectorAll(`.fchip[data-group="${g}"]`).forEach(c=>c.classList.remove('on'));
+    chip.classList.add('on');
+    pendingFilters[g]=chip.dataset.v;
+  });
+});
+
+// ── RENDER ─────────────────────────────────────────────────
+function render(){
+  let list=allDresses.filter(d=>{
+    const f=activeFilters;
+    if(f.loc==='Klerksdorp'&&d.location!=='Klerksdorp'&&d.location!=='Both')return false;
+    if(f.loc==='Potchefstroom'&&d.location!=='Potchefstroom'&&d.location!=='Both')return false;
+    if(f.style!=='all'&&!(d.style||'').toLowerCase().includes(f.style.toLowerCase()))return false;
+    if(f.colour!=='all'&&!(d.colour||'').toLowerCase().includes(f.colour.toLowerCase()))return false;
+    if(f.size!=='all'&&!(d.size||'').toLowerCase().includes(f.size.toLowerCase()))return false;
+    if(f.occ!=='all'&&!(d.occasion||'').toLowerCase().includes(f.occ.toLowerCase()))return false;
+    if(searchQ&&!(d.name||'').toLowerCase().includes(searchQ)&&!(d.description||'').toLowerCase().includes(searchQ)&&!(d.colour||'').toLowerCase().includes(searchQ))return false;
+    return true;
+  });
+
+  // Sort: available on date first
+  if(evDate)list=[...list].sort((a,b)=>{
+    const ao=isAvail(a,evDate),bo=isAvail(b,evDate);
+    return(ao&&!bo)?-1:(!ao&&bo)?1:0;
+  });
+
+  const availCnt=evDate?list.filter(d=>isAvail(d,evDate)).length:null;
+  document.getElementById('gcnt').textContent=evDate
+    ?`${availCnt} available · ${list.length} total`
+    :`${list.length} dress${list.length!==1?'es':''}`;
+
+  if(!list.length){
+    document.getElementById('gg-wrap').innerHTML=`<div class="gg"><div class="empty"><div class="empty-icon">🔍</div><h3>No dresses found</h3><p style="font-size:13px;color:var(--mid)">Try different filters or clear them</p><button onclick="clearFilters();applyFilters()" style="margin-top:12px;background:var(--gold);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-family:'Inter',sans-serif;font-size:13px;cursor:pointer">Clear Filters</button></div></div>`;
+    return;
+  }
+
+  const wa=loc=>loc==='Potchefstroom'?WA_CEC:WA_LEO;
+  const cards=list.map(d=>{
+    const avail=d.status==='Available';
+    const dateOk=evDate?isAvail(d,evDate):null;
+    const canBook=avail&&dateOk!==false;
+    const label=d.name||d.description||'this dress';
+    const msg=encodeURIComponent(`Hi! 💕 I saw ${label} on your gallery. ${evDate?'My event is '+fmtDate(evDate)+'. ':''} Can you help me?`);
+    let bdgC='avail',bdgT='Available';
+    if(!avail){bdgC='rented';bdgT='Rented';}
+    else if(dateOk===false){bdgC='dno';bdgT='Taken';}
+    else if(dateOk===true){bdgC='dok';bdgT='✓ Free';}
+    return `<div class="dcard${!canBook&&evDate?' faded':''}">
+      <div class="cim">
+        ${d.photo_url?`<img src="${d.photo_url}" alt="${label}" loading="lazy">`:'<span>👗</span>'}
+        <span class="cbdg ${bdgC}">${bdgT}</span>
+      </div>
+      <div class="cbo">
+        <div class="cname">${d.name||'Gown'}</div>
+        <div class="cdesc">${d.description||''}</div>
+        <div class="ctag-row">
+          ${d.colour?`<span class="ctag">🎨 ${d.colour}</span>`:''}
+          ${d.size?`<span class="ctag">📏 ${d.size}</span>`:''}
+        </div>
+        <div class="cprice">R${Number(d.rental_price||0).toLocaleString('en-ZA')} <span>/ rental</span></div>
+        <div class="cactions">
+          ${canBook
+            ?`<button class="bkbtn" onclick="openBk('${d.id}','${label.replace(/'/g,"\\'")}','${d.location||'Klerksdorp'}')">📅 Book</button>`
+            :`<div class="tbtn">${avail?'Taken on this date':'Unavailable'}</div>`}
+          <a class="wabtn" href="https://wa.me/${wa(d.location||'')}?text=${msg}" target="_blank">💬</a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('gg-wrap').innerHTML=`<div class="gg">${cards}</div>`;
+}
+
+// ── BOOKING ────────────────────────────────────────────────
+let selectedType='Rental';
+function selType(el){
+  document.querySelectorAll('.type-opt').forEach(e=>e.classList.remove('on'));
+  el.classList.add('on');
+  selectedType=el.dataset.type;
+  document.getElementById('bk-date-lbl').textContent=selectedType==='Fitting'?'Preferred Fitting Date':'Event Date';
+}
+function openBk(id,name,loc){
+  bkDressId=id;bkDressName=name;
+  document.getElementById('dress-chip-name').textContent=name;
+  document.getElementById('dress-chip').style.display='flex';
+  document.getElementById('bk-loc').value=loc;
+  document.getElementById('bk-date').value=evDate||'';
+  document.getElementById('bk-name').value='';
+  document.getElementById('bk-phone').value='';
+  document.getElementById('bk-notes').value='';
+  selectedType='Rental';
+  document.querySelectorAll('.type-opt').forEach(e=>e.classList.toggle('on',e.dataset.type==='Rental'));
+  document.getElementById('bk-form').style.display='block';
+  document.getElementById('bk-success').style.display='none';
+  document.getElementById('bk-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeBk(){
+  document.getElementById('bk-modal').classList.remove('on');
+  document.getElementById('bk-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+async function submitBooking(){
+  const name=document.getElementById('bk-name').value.trim();
+  const phone=document.getElementById('bk-phone').value.trim();
+  if(!name||!phone){alert('Please enter your name and WhatsApp number.');return;}
+  const btn=document.getElementById('bk-submit');
+  btn.disabled=true;btn.textContent='Sending…';
+  try{
+    await fetch(`${SB_URL}/rest/v1/bookings`,{
+      method:'POST',
+      headers:{...HDR,'Prefer':'return=minimal'},
+      body:JSON.stringify({
+        client_name:name,client_phone:phone,
+        dress_id:bkDressId||null,dress_name:bkDressName,
+        booking_type:selectedType,
+        event_date:document.getElementById('bk-date').value||null,
+        location:document.getElementById('bk-loc').value,
+        notes:document.getElementById('bk-notes').value.trim(),
+        status:'Pending',
+      })
+    });
+    document.getElementById('bk-form').style.display='none';
+    document.getElementById('bk-sname').textContent=name;
+    document.getElementById('bk-success').style.display='block';
+    const loc=document.getElementById('bk-loc').value;
+    const waNum=loc==='Potchefstroom'?WA_CEC:WA_LEO;
+    const msg=`Hi ${name}! 💕 Thank you for your ${selectedType.toLowerCase()} request for ${bkDressName} at Once Upon a Dress. We received it and will confirm within 24 hours. ✨`;
+    setTimeout(()=>window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`,'_blank'),700);
+  }catch(e){alert('Something went wrong — please try again.');}
+  btn.disabled=false;btn.textContent='Send Booking Request 💕';
+}
+
+// ── BOOKING TRACKER ────────────────────────────────────────
+async function trackBooking(){
+  const phone=document.getElementById('track-in').value.trim();
+  const res=document.getElementById('track-result');
+  if(!phone){res.innerHTML='';return;}
+  const clean=phone.replace(/\D/g,'');
+  if(clean.length<9){res.innerHTML='<p style="font-size:12px;color:var(--mid)">Please enter a valid number</p>';return;}
+  res.innerHTML='<p style="font-size:12px;color:var(--mid)">Searching…</p>';
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/bookings?client_phone=like.*${clean}*&select=*&order=created_at.desc`,{headers:HDR});
+    const bks=await r.json();
+    if(!bks.length){res.innerHTML='<p style="font-size:12px;color:var(--mid);padding:8px 0">No bookings found for this number.</p>';return;}
+    res.innerHTML=bks.map(b=>`<div class="tcard">
+      <div class="tstat ${b.status==='Confirmed'?'ts-c':b.status==='Declined'?'ts-d':'ts-p'}">${b.status}</div>
+      <div class="tname">${b.dress_name||'Dress enquiry'}</div>
+      <div class="tmeta">
+        ${b.booking_type} · ${b.event_date?fmtDate(b.event_date):'No date'} · ${b.location}<br>
+        Submitted ${new Date(b.created_at).toLocaleDateString('en-ZA')}
+      </div>
+    </div>`).join('');
+  }catch(e){res.innerHTML='<p style="font-size:12px;color:var(--red)">Error searching — please try again</p>';}
+}
+document.getElementById('track-in').addEventListener('keydown',e=>{if(e.key==='Enter')trackBooking();});
+
+load();
+</script>
+</body>
+</html>
